@@ -39,6 +39,13 @@ dependencies:
   http: ^0.13.6
   get_storage: ^2.1.1 #locat storage
   connectivity_plus: ^4.0.2 #internet connection
+  syncfusion_flutter_gauges: ^23.1.38
+  syncfusion_flutter_charts: ^23.1.38
+  glass_kit: ^3.0.0
+  flutter_svg: ^2.0.9
+  intl: ^0.18.1
+  syncfusion_flutter_datepicker: ^23.2.7
+  hexcolor: ^3.0.1
 
 dev_dependencies:
   flutter_test:
@@ -63,7 +70,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
+  assets:
+    - assets/images/
+    - assets/icons/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
@@ -78,11 +87,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
+  fonts:
+    - family: poppins
+      fonts:
+        - asset: assets/fonts/Poppins/Poppins-SemiBold.ttf
   #         style: italic
   #   - family: Trajan Pro
   #     fonts:

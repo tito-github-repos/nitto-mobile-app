@@ -1,0 +1,683 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:nitto_app/controllers/register_controller.dart';
+import 'package:nitto_app/routes/routes.dart';
+
+import '../utils/app_colors.dart';
+import '../utils/helper.dart';
+import '../utils/utils.dart';
+
+class Register extends StatelessWidget {
+  final controller = Get.put(RegisterController());
+  Register({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    Utils().transparent();
+    return Scaffold(
+      backgroundColor: AppColors.primary,
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Register Nitto',
+                  style: TextStyle(fontSize: 24.0, color: AppColors.black),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 16.0, right: 16.0, top: 16.0, bottom: 16.0),
+                    child: SizedBox(
+                      width: MediaQuery.of(Get.context!).size.width * 0.80,
+                      child: Form(
+                        key: controller.registerFormKey,
+                        autovalidateMode: AutovalidateMode.always,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const SizedBox(height: 10),
+                            TextFormField(
+                              keyboardType: TextInputType.emailAddress,
+                              controller: controller.regEmailController.value,
+                              validator: (registerMobileController) {
+                                if (registerMobileController!.isEmpty) {
+                                  return 'Email address or username required *';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.never,
+                                labelText: "Email *",
+                                filled: true,
+                                fillColor: AppColors.white,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.black),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.black),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.primary),
+                                ),
+                                prefixIcon:
+                                    Icon(Icons.email, color: AppColors.black),
+                                labelStyle: TextStyle(color: AppColors.black),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              controller: controller.regPassController.value,
+                              obscureText: controller.passObscure.value,
+                              validator: (loginIdController) {
+                                if (loginIdController!.isEmpty) {
+                                  return 'Password Required';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.never,
+                                labelText: "Password",
+                                filled: true,
+                                fillColor: AppColors.white,
+                                // suffixIcon: controller.passObscure.value == true
+                                //     ? IconButton(
+                                //         onPressed: () => {
+                                //           controller.passObscure.value =
+                                //               !controller.passObscure.value
+                                //         },
+                                //         icon: Icon(
+                                //           Icons.visibility_off,
+                                //           color: AppColors.black,
+                                //         ),
+                                //       )
+                                //     : IconButton(
+                                //         onPressed: () => {
+                                //           controller.passObscure.value =
+                                //               !controller.passObscure.value
+                                //         },
+                                //         icon: Icon(
+                                //           Icons.visibility,
+                                //           color: AppColors.primary,
+                                //         ),
+                                //       ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.black),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.black),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.primary),
+                                ),
+                                prefixIcon: Icon(
+                                  Icons.lock,
+                                  color: AppColors.black,
+                                ),
+                                labelStyle: TextStyle(
+                                  color: AppColors.black,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              controller: controller.regConPassController.value,
+                              obscureText: controller.passObscure.value,
+                              validator: (loginIdController) {
+                                if (loginIdController!.isEmpty) {
+                                  return 'Confirm Password Required';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.never,
+                                labelText: "Confirm Password *",
+                                filled: true,
+                                fillColor: AppColors.white,
+                                // suffixIcon: controller.passObscure.value == true
+                                //     ? IconButton(
+                                //         onPressed: () => {
+                                //           controller.passObscure.value =
+                                //               !controller.passObscure.value
+                                //         },
+                                //         icon: Icon(
+                                //           Icons.visibility_off,
+                                //           color: AppColors.black,
+                                //         ),
+                                //       )
+                                //     : IconButton(
+                                //         onPressed: () => {
+                                //           controller.passObscure.value =
+                                //               !controller.passObscure.value
+                                //         },
+                                //         icon: Icon(
+                                //           Icons.visibility,
+                                //           color: AppColors.primary,
+                                //         ),
+                                //       ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.black),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.black),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.primary),
+                                ),
+                                prefixIcon: Icon(
+                                  Icons.lock,
+                                  color: AppColors.black,
+                                ),
+                                labelStyle: TextStyle(
+                                  color: AppColors.black,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              keyboardType: TextInputType.text,
+                              controller: controller.regNameController.value,
+                              validator: (registerMobileController) {
+                                if (registerMobileController!.isEmpty) {
+                                  return 'name required *';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.never,
+                                labelText: "Name *",
+                                filled: true,
+                                fillColor: AppColors.white,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.black),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.black),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.primary),
+                                ),
+                                prefixIcon:
+                                    Icon(Icons.person, color: AppColors.black),
+                                labelStyle: TextStyle(color: AppColors.black),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              keyboardType: TextInputType.text,
+                              controller: controller.regAddressController.value,
+                              validator: (registerMobileController) {
+                                if (registerMobileController!.isEmpty) {
+                                  return 'address required *';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.never,
+                                labelText: "Address *",
+                                filled: true,
+                                fillColor: AppColors.white,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.black),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.black),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.primary),
+                                ),
+                                prefixIcon:
+                                    Icon(Icons.book, color: AppColors.black),
+                                labelStyle: TextStyle(color: AppColors.black),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              keyboardType: TextInputType.text,
+                              controller: controller.regCityController.value,
+                              validator: (registerMobileController) {
+                                if (registerMobileController!.isEmpty) {
+                                  return 'city required *';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.never,
+                                labelText: "City *",
+                                filled: true,
+                                fillColor: AppColors.white,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.black),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.black),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.primary),
+                                ),
+                                prefixIcon: Icon(Icons.location_city,
+                                    color: AppColors.black),
+                                labelStyle: TextStyle(color: AppColors.black),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              keyboardType: TextInputType.text,
+                              controller: controller.regRegionController.value,
+                              validator: (registerMobileController) {
+                                if (registerMobileController!.isEmpty) {
+                                  return 'region required *';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.never,
+                                labelText: "Region *",
+                                filled: true,
+                                fillColor: AppColors.white,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.black),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.black),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.primary),
+                                ),
+                                prefixIcon:
+                                    Icon(Icons.flag, color: AppColors.black),
+                                labelStyle: TextStyle(color: AppColors.black),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              keyboardType: TextInputType.text,
+                              controller: controller.regCountryController.value,
+                              validator: (registerMobileController) {
+                                if (registerMobileController!.isEmpty) {
+                                  return 'country required *';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.never,
+                                labelText: "Country *",
+                                filled: true,
+                                fillColor: AppColors.white,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.black),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.black),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.primary),
+                                ),
+                                prefixIcon:
+                                    Icon(Icons.flag, color: AppColors.black),
+                                labelStyle: TextStyle(color: AppColors.black),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              keyboardType: TextInputType.number,
+                              controller: controller.regZipController.value,
+                              validator: (registerMobileController) {
+                                if (registerMobileController!.isEmpty) {
+                                  return 'zipcode required *';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.never,
+                                labelText: "zipcode *",
+                                filled: true,
+                                fillColor: AppColors.white,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.black),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.black),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.primary),
+                                ),
+                                prefixIcon:
+                                    Icon(Icons.flag, color: AppColors.black),
+                                labelStyle: TextStyle(color: AppColors.black),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              keyboardType: TextInputType.number,
+                              controller: controller.regMobileController.value,
+                              validator: (registerMobileController) {
+                                if (registerMobileController!.isEmpty) {
+                                  return 'mobile no required *';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.never,
+                                labelText: "Mobile No *",
+                                filled: true,
+                                fillColor: AppColors.white,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.black),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.black),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.primary),
+                                ),
+                                prefixIcon:
+                                    Icon(Icons.phone, color: AppColors.black),
+                                labelStyle: TextStyle(color: AppColors.black),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              keyboardType: TextInputType.text,
+                              controller: controller.regIndController.value,
+                              validator: (registerMobileController) {
+                                if (registerMobileController!.isEmpty) {
+                                  return 'Industry type required *';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.never,
+                                labelText: "Industry Type *",
+                                filled: true,
+                                fillColor: AppColors.white,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.black),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.black),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.primary),
+                                ),
+                                // prefixIcon:
+                                //     Icon(Icons.factory, color: AppColors.black),
+                                labelStyle: TextStyle(color: AppColors.black),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              keyboardType: TextInputType.text,
+                              controller: controller.regComController.value,
+                              validator: (registerMobileController) {
+                                if (registerMobileController!.isEmpty) {
+                                  return 'company required *';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.never,
+                                labelText: "Company Name *",
+                                filled: true,
+                                fillColor: AppColors.white,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.black),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.black),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.primary),
+                                ),
+                                prefixIcon: Icon(Icons.description,
+                                    color: AppColors.black),
+                                labelStyle: TextStyle(color: AppColors.black),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              keyboardType: TextInputType.text,
+                              controller: controller.regDesController.value,
+                              validator: (registerMobileController) {
+                                if (registerMobileController!.isEmpty) {
+                                  return 'designation required *';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.never,
+                                labelText: "Designation *",
+                                filled: true,
+                                fillColor: AppColors.white,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.black),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.black),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  borderSide:
+                                      BorderSide(color: AppColors.primary),
+                                ),
+                                prefixIcon: Icon(Icons.description,
+                                    color: AppColors.black),
+                                labelStyle: TextStyle(color: AppColors.black),
+                              ),
+                            ),
+
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.end,
+                            //   children: [
+                            //     TextButton(
+                            //       onPressed: (() => {}),
+                            //       child: Text(
+                            //         'Reset Password',
+                            //         style: TextStyle(
+                            //             color: AppColors.black, fontSize: 16),
+                            //       ),
+                            //     )
+                            //   ],
+                            // ),
+                            const SizedBox(height: 10),
+                            controller.isLoading.isFalse
+                                ? Container(
+                                    height: 40,
+                                    width: double.infinity,
+                                    margin: const EdgeInsets.only(
+                                        left: 90, right: 90),
+                                    child: ElevatedButton(
+                                      onPressed: () async {
+                                        if (controller
+                                            .registerFormKey.currentState!
+                                            .validate()) {
+                                          controller.register();
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                            ..hideCurrentSnackBar()
+                                            ..showSnackBar(
+                                              Helper().snackBar(
+                                                  'please fill all the fields'),
+                                            );
+                                        }
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: AppColors.loginBtn,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        "Register",
+                                        style: TextStyle(
+                                          color: AppColors.white,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : Utils().loadingProgressBar(),
+                            const SizedBox(height: 10),
+                            Divider(
+                              color: AppColors.black,
+                              thickness: 2.0,
+                            ),
+                            TextButton(
+                              onPressed: (() =>
+                                  {Get.offAllNamed(Routes.login)}),
+                              child: const Text(
+                                'Login Now',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  decoration: TextDecoration.underline,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.90,
+                              height: 80,
+                              child: Image.asset('assets/images/nitto_hyd.png'),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              'Need Assistance? Click link below',
+                              style: TextStyle(
+                                  color: AppColors.black, fontSize: 20),
+                            ),
+                            TextButton(
+                              onPressed: (() => {}),
+                              child: Text(
+                                'support@ivigilplus.com',
+                                style: TextStyle(color: AppColors.loginBtn),
+                              ),
+                            )
+                            //   mainAxisAlignment: MainAxisAlignment.center,
+                            //   children: [
+                            //     Text(
+                            //       "copyrights @",
+                            //       style: TextStyle(color: AppColors.black),
+                            //     ),
+                            //     TextButton(
+                            //       onPressed: () {
+                            //         //Get.offAllNamed(RouteHelper.auth);
+                            //       },
+                            //       child: Text(
+                            //         "Real List",
+                            //         style: TextStyle(
+                            //           color: AppColors.primary,
+                            //           fontWeight: FontWeight.bold,
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -18,8 +18,8 @@ class Utils {
       width: 30,
       height: 30,
       child: CircularProgressIndicator(
-        backgroundColor: Colors.grey,
-        color: AppColors.primary,
+        backgroundColor: Colors.blue[600],
+        color: Colors.blue[900],
       ),
     );
   }

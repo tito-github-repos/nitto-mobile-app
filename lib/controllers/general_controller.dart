@@ -26,10 +26,6 @@ class GeneralController extends GetxController {
   }
 
   @override
-  void onReady() {
-    super.onReady();
-  }
-
   void onClose() {
     super.onClose();
     streamSubscription.cancel();
