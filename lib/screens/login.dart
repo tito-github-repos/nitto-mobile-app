@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:nitto_app/controllers/login_controller.dart';
+import 'package:nitto_app/screens/webview.dart';
 import 'package:nitto_app/utils/app_colors.dart';
 import 'package:nitto_app/utils/utils.dart';
 
@@ -47,24 +48,31 @@ class Login extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(30.0),
+                        padding: const EdgeInsets.all(16.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              'HYDRA ',
-                              style: TextStyle(
-                                fontSize: 34.0,
-                                color: Colors.blue[900],
-                                fontFamily: 'poppins',
-                              ),
-                            ),
-                            Text(
-                              'SAVE',
-                              style: TextStyle(
-                                fontSize: 34.0,
-                                color: Colors.blue[600],
-                                fontFamily: 'poppins',
+                            // Text(
+                            //   'HYDRA ',
+                            //   style: TextStyle(
+                            //     fontSize: 34.0,
+                            //     color: Colors.blue[900],
+                            //     fontFamily: 'poppins',
+                            //   ),
+                            // ),
+                            // Text(
+                            //   'SAVE',
+                            //   style: TextStyle(
+                            //     fontSize: 34.0,
+                            //     color: Colors.blue[600],
+                            //     fontFamily: 'poppins',
+                            //   ),
+                            // ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.70,
+                              height: 90,
+                              child: Image.asset(
+                                'assets/images/nitto_hyd.png',
                               ),
                             ),
                           ],
@@ -74,7 +82,7 @@ class Login extends StatelessWidget {
                         width: MediaQuery.of(context).size.width,
                         child: Padding(
                           padding: const EdgeInsets.only(
-                              left: 16.0, right: 16.0, top: 16.0, bottom: 16.0),
+                              left: 16.0, right: 16.0, bottom: 16.0),
                           child: SizedBox(
                             width:
                                 MediaQuery.of(Get.context!).size.width * 0.80,
@@ -86,23 +94,38 @@ class Login extends StatelessWidget {
                                 children: [
                                   const SizedBox(height: 10),
                                   SizedBox(
-                                    height: 90,
+                                    height: 50,
                                     child: TextFormField(
                                       keyboardType: TextInputType.text,
-                                      onChanged: (s) =>
-                                          controller.isEmailValid(s) == true
-                                              ? controller.checkUser()
-                                              : controller.loginIdErrMsg.value =
-                                                  '',
+                                      inputFormatters: <TextInputFormatter>[
+                                        LengthLimitingTextInputFormatter(50),
+                                        FilteringTextInputFormatter.allow(
+                                            RegExp("[0-9a-zA-Z,@,.]")),
+                                      ],
+                                      onChanged: (s) => {
+                                        if (controller.isEmailValid(s) == true)
+                                          {controller.checkUser()}
+                                        else
+                                          {
+                                            controller.isExist(false),
+                                            controller.passwordErrorMsg.value =
+                                                ''
+                                          }
+                                      },
                                       controller:
                                           controller.loginIdController.value,
                                       validator: (text) {
                                         if (text!.isEmpty) {
-                                          return 'email required *';
+                                          controller.usernameErrorMsg.value =
+                                              'Email is required';
                                         } else if (controller
-                                                .loginIdErrMsg.value !=
-                                            '') {
-                                          return controller.loginIdErrMsg.value;
+                                                .isEmailValid(text) ==
+                                            false) {
+                                          controller.usernameErrorMsg.value =
+                                              'Invalid email address';
+                                        } else {
+                                          controller.usernameErrorMsg.value =
+                                              '';
                                         }
                                         return null;
                                       },
@@ -137,10 +160,36 @@ class Login extends StatelessWidget {
                                       ),
                                     ),
                                   ),
+                                  Obx(
+                                    () =>
+                                        controller.usernameErrorMsg.value == ''
+                                            ? const SizedBox(height: 20)
+                                            : Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 20.0,
+                                                          top: 5,
+                                                          bottom: 5),
+                                                  child: Text(
+                                                    controller
+                                                        .usernameErrorMsg.value,
+                                                    style: const TextStyle(
+                                                        color: Colors.red),
+                                                  ),
+                                                ),
+                                              ),
+                                  ),
                                   SizedBox(
-                                    height: 90,
+                                    height: 50,
                                     child: Obx(
                                       () => TextFormField(
+                                        inputFormatters: <TextInputFormatter>[
+                                          LengthLimitingTextInputFormatter(30),
+                                          FilteringTextInputFormatter.allow(
+                                              RegExp("[0-9a-zA-Z,@]")),
+                                        ],
                                         enabled: controller.isExist.value,
                                         controller: controller
                                             .loginPassController.value,
@@ -150,7 +199,13 @@ class Login extends StatelessWidget {
                                             ? (loginPassController) {
                                                 if (loginPassController!
                                                     .isEmpty) {
-                                                  return 'Password Required *';
+                                                  controller.passwordErrorMsg
+                                                          .value =
+                                                      'Password is required';
+                                                } else if (loginPassController
+                                                    .isNotEmpty) {
+                                                  controller.passwordErrorMsg
+                                                      .value = '';
                                                 }
                                                 return null;
                                               }
@@ -185,12 +240,56 @@ class Login extends StatelessWidget {
                                           ),
                                           prefixIcon: Icon(Icons.lock,
                                               color: AppColors.offWhite),
+                                          // suffixIcon:
+                                          //     controller.passObscure.value ==
+                                          //             true
+                                          //         ? IconButton(
+                                          //             onPressed: () => {
+                                          //               controller.passObscure
+                                          //                       .value =
+                                          //                   !controller
+                                          //                       .passObscure
+                                          //                       .value
+                                          //             },
+                                          //             icon: const Icon(
+                                          //               Icons.visibility_off,
+                                          //               color: Colors.black,
+                                          //             ),
+                                          //           )
+                                          //         : IconButton(
+                                          //             onPressed: () => {
+                                          //               controller.passObscure
+                                          //                       .value =
+                                          //                   !controller
+                                          //                       .passObscure
+                                          //                       .value
+                                          //             },
+                                          //             icon: const Icon(
+                                          //               Icons.visibility,
+                                          //               color: Colors.black,
+                                          //             ),
+                                          //           ),
                                           labelStyle: TextStyle(
                                               color: AppColors.offWhite),
                                         ),
                                       ),
                                     ),
                                   ),
+                                  Obx(() => controller.passwordErrorMsg.value !=
+                                          ''
+                                      ? Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 20.0, top: 5, bottom: 5),
+                                            child: Text(
+                                              controller.passwordErrorMsg.value,
+                                              style: const TextStyle(
+                                                  color: Colors.red),
+                                            ),
+                                          ),
+                                        )
+                                      : Container()),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
@@ -255,7 +354,16 @@ class Login extends StatelessWidget {
                                                           .loginFormKey
                                                           .currentState!
                                                           .validate()) {
-                                                        controller.login();
+                                                        controller.login(
+                                                            'login',
+                                                            controller
+                                                                .loginIdController
+                                                                .value
+                                                                .text,
+                                                            controller
+                                                                .loginPassController
+                                                                .value
+                                                                .text);
                                                       } else {
                                                         ScaffoldMessenger.of(
                                                             context)
@@ -391,25 +499,33 @@ class Login extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           SizedBox(
-                            height: 70,
+                            height: 85,
                             width: 20,
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                color: Color.fromARGB(255, 198, 48, 37),
-                                borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(5.0),
-                                    bottomRight: Radius.circular(5.0)),
-                              ),
-                              child: const RotatedBox(
-                                quarterTurns: -1,
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: 10, top: 2),
-                                  child: Text(
-                                    "Support",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600),
+                            child: InkWell(
+                              onTap: () => {
+                                Get.to(WebView(), arguments: {
+                                  'value':
+                                      'https://hydrasave.com/account/login-help2'
+                                })
+                              },
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  color: Color.fromARGB(255, 198, 48, 37),
+                                  borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(5.0),
+                                      bottomRight: Radius.circular(5.0)),
+                                ),
+                                child: const RotatedBox(
+                                  quarterTurns: -1,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 10, top: 2),
+                                    child: Text(
+                                      "Login Help",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -419,10 +535,10 @@ class Login extends StatelessWidget {
                             width: MediaQuery.of(context).size.width * 0.15,
                           ),
                           SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.50,
-                            height: 80,
+                            width: MediaQuery.of(context).size.width * 0.60,
+                            height: 90,
                             child: Image.asset(
-                              'assets/images/nitto_hyd.png',
+                              'assets/images/nitto_hyd1.png',
                             ),
                           ),
                         ],

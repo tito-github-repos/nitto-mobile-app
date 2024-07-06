@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:nitto_app/controllers/set_points_controller.dart';
 
 import '../utils/app_colors.dart';
@@ -42,7 +44,7 @@ class SetPoints extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Corporate / OEM name",
+                                "    ",
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 16,
@@ -50,7 +52,16 @@ class SetPoints extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                "Company name",
+                                "Set Points",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                  color: Colors.indigo[900],
+                                ),
+                              ),
+                              Text(
+                                GetStorage()
+                                    .read('gs_login_data')['companyName'],
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 16,
@@ -117,7 +128,7 @@ class SetPoints extends StatelessWidget {
                                             print("-----------> $value");
                                             controller.plantValue =
                                                 value.toString();
-                                            controller.getTrain();
+                                            controller.getTrain('manual');
                                           },
                                           items: controller.plantModel?.data!
                                               .map((plant) => DropdownMenuItem(
@@ -182,7 +193,7 @@ class SetPoints extends StatelessWidget {
                                           onChanged: (value) {
                                             controller.trainValue =
                                                 value.toString();
-                                            controller.getPass();
+                                            controller.getPass('manual');
                                           },
                                           items: controller.trainModel?.data!
                                               .map(
@@ -249,7 +260,7 @@ class SetPoints extends StatelessWidget {
                                           onChanged: (value) {
                                             controller.passValue =
                                                 value.toString();
-                                            controller.getStage();
+                                            controller.getStage('manual');
                                           },
                                           items: controller.passModel?.data!
                                               .map(
@@ -316,7 +327,7 @@ class SetPoints extends StatelessWidget {
                                           onChanged: (value) {
                                             controller.stageValue =
                                                 value.toString();
-                                            controller.getStage();
+                                            controller.getStage('manual');
                                           },
                                           items: controller.stageModel?.data!
                                               .map(
@@ -368,10 +379,10 @@ class SetPoints extends StatelessWidget {
                                               children: [
                                                 Row(
                                                   children: [
-                                                    const SizedBox(width: 160),
+                                                    const SizedBox(width: 180),
                                                     Container(
                                                       height: 30,
-                                                      width: 120,
+                                                      width: 150,
                                                       color: Colors.blue[900],
                                                       child: const Align(
                                                         child: Text(
@@ -387,7 +398,7 @@ class SetPoints extends StatelessWidget {
                                                     const SizedBox(width: 20),
                                                     Container(
                                                       height: 30,
-                                                      width: 120,
+                                                      width: 150,
                                                       color: Colors.blue[900],
                                                       child: const Align(
                                                         child: Text(
@@ -400,26 +411,26 @@ class SetPoints extends StatelessWidget {
                                                         ),
                                                       ),
                                                     ),
+                                                    // const SizedBox(width: 20),
+                                                    // Container(
+                                                    //   height: 30,
+                                                    //   width: 150,
+                                                    //   color: Colors.blue[900],
+                                                    //   child: const Align(
+                                                    //     child: Text(
+                                                    //       'Reference',
+                                                    //       style: TextStyle(
+                                                    //           color:
+                                                    //               Colors.white),
+                                                    //       textAlign:
+                                                    //           TextAlign.center,
+                                                    //     ),
+                                                    //   ),
+                                                    // ),
                                                     const SizedBox(width: 20),
                                                     Container(
                                                       height: 30,
-                                                      width: 120,
-                                                      color: Colors.blue[900],
-                                                      child: const Align(
-                                                        child: Text(
-                                                          'Reference',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white),
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(width: 20),
-                                                    Container(
-                                                      height: 30,
-                                                      width: 120,
+                                                      width: 150,
                                                       color: Colors.blue[900],
                                                       child: const Align(
                                                         child: Text(
@@ -435,7 +446,7 @@ class SetPoints extends StatelessWidget {
                                                     const SizedBox(width: 20),
                                                     Container(
                                                       height: 30,
-                                                      width: 120,
+                                                      width: 150,
                                                       color: Colors.blue[900],
                                                       child: const Align(
                                                         child: Text(
@@ -449,6 +460,21 @@ class SetPoints extends StatelessWidget {
                                                       ),
                                                     ),
                                                     const SizedBox(width: 20),
+                                                    Container(
+                                                      height: 30,
+                                                      width: 90,
+                                                      color: Colors.orange[900],
+                                                      child: const Align(
+                                                        child: Text(
+                                                          'Alarms',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white),
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                        ),
+                                                      ),
+                                                    ),
                                                   ],
                                                 ),
                                                 const SizedBox(height: 30),
@@ -461,7 +487,7 @@ class SetPoints extends StatelessWidget {
                                                           alignment: Alignment
                                                               .centerLeft,
                                                           child: Text(
-                                                            'Permeate Flow',
+                                                            'Normalised Permeate Flow',
                                                             style: TextStyle(
                                                                 fontSize: 14,
                                                                 fontWeight:
@@ -471,75 +497,120 @@ class SetPoints extends StatelessWidget {
                                                     ),
                                                     const SizedBox(width: 20),
                                                     SizedBox(
-                                                      height: 50,
-                                                      width: 120,
-                                                      child: TextFormField(
-                                                        controller: controller
-                                                            .npf_highhigh.value,
-                                                        validator: (text) {
-                                                          if (text!.isEmpty) {
-                                                            return 'High High is required ';
-                                                          }
-                                                          return null;
-                                                        },
-                                                        keyboardType:
-                                                            TextInputType
-                                                                .number,
-                                                        onChanged: (value) =>
-                                                            {},
-                                                        decoration:
-                                                            InputDecoration(
-                                                          floatingLabelBehavior:
-                                                              FloatingLabelBehavior
-                                                                  .never,
-                                                          filled: true,
-                                                          fillColor:
-                                                              AppColors.white,
-                                                          border:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          enabledBorder:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          focusedBorder:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          labelStyle: TextStyle(
-                                                              color: AppColors
-                                                                  .offWhite),
-                                                          suffixIcon: Icon(
-                                                              Icons.percent,
-                                                              color: AppColors
-                                                                  .offWhite),
-                                                        ),
-                                                      ),
-                                                    ),
+                                                        height: 40,
+                                                        width: 150,
+                                                        child: TextFormField(
+                                                            inputFormatters: <TextInputFormatter>[
+                                                              LengthLimitingTextInputFormatter(
+                                                                  10),
+                                                              FilteringTextInputFormatter
+                                                                  .allow(RegExp(
+                                                                      "[0-9,.]")),
+                                                            ],
+                                                            controller:
+                                                                controller
+                                                                    .npf_highhigh
+                                                                    .value,
+                                                            validator: (text) {
+                                                              if (double.parse(
+                                                                      text!) >=
+                                                                  100) {
+                                                                controller
+                                                                        .errorMessage =
+                                                                    'High High cannot exceed 100';
+                                                                return '';
+                                                              }
+                                                              return null;
+                                                            },
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            onChanged:
+                                                                (value) => {},
+                                                            decoration:
+                                                                InputDecoration(
+                                                              errorStyle:
+                                                                  const TextStyle(
+                                                                      fontSize:
+                                                                          1,
+                                                                      height:
+                                                                          0),
+                                                              isDense: true,
+                                                              contentPadding:
+                                                                  EdgeInsets
+                                                                      .fromLTRB(
+                                                                          10,
+                                                                          20,
+                                                                          10,
+                                                                          0),
+                                                              floatingLabelBehavior:
+                                                                  FloatingLabelBehavior
+                                                                      .never,
+                                                              filled: true,
+                                                              fillColor:
+                                                                  AppColors
+                                                                      .white,
+                                                              border:
+                                                                  OutlineInputBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10.0),
+                                                                borderSide: BorderSide(
+                                                                    color: AppColors
+                                                                        .offWhite),
+                                                              ),
+                                                              enabledBorder:
+                                                                  OutlineInputBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10.0),
+                                                                borderSide: BorderSide(
+                                                                    color: AppColors
+                                                                        .offWhite),
+                                                              ),
+                                                              focusedBorder:
+                                                                  OutlineInputBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10.0),
+                                                                borderSide: BorderSide(
+                                                                    color: AppColors
+                                                                        .offWhite),
+                                                              ),
+                                                              focusedErrorBorder:
+                                                                  OutlineInputBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10.0),
+                                                                borderSide:
+                                                                    BorderSide(
+                                                                        color: Colors
+                                                                            .red),
+                                                              ),
+                                                              labelStyle: TextStyle(
+                                                                  color: AppColors
+                                                                      .offWhite),
+                                                              suffixIcon: Icon(
+                                                                  Icons.percent,
+                                                                  color: AppColors
+                                                                      .offWhite),
+                                                            ))),
                                                     const SizedBox(width: 20),
                                                     SizedBox(
-                                                      height: 50,
-                                                      width: 120,
+                                                      height: 40,
+                                                      width: 150,
                                                       child: TextFormField(
+                                                        inputFormatters: <TextInputFormatter>[
+                                                          LengthLimitingTextInputFormatter(
+                                                              10),
+                                                          FilteringTextInputFormatter
+                                                              .allow(RegExp(
+                                                                  "[0-9,.]")),
+                                                        ],
                                                         controller: controller
                                                             .npf_high.value,
                                                         keyboardType:
@@ -548,13 +619,29 @@ class SetPoints extends StatelessWidget {
                                                         onChanged: (value) =>
                                                             {},
                                                         validator: (text) {
-                                                          if (text!.isEmpty) {
-                                                            return 'High is required *';
+                                                          if (double.parse(
+                                                                  text!) >=
+                                                              100) {
+                                                            controller
+                                                                    .errorMessage =
+                                                                'High cannot exceed 100';
+                                                            return '';
                                                           }
                                                           return null;
                                                         },
                                                         decoration:
                                                             InputDecoration(
+                                                          errorStyle:
+                                                              const TextStyle(
+                                                                  height: 0),
+                                                          isDense: true,
+                                                          contentPadding:
+                                                              EdgeInsets
+                                                                  .fromLTRB(
+                                                                      10,
+                                                                      20,
+                                                                      10,
+                                                                      0),
                                                           floatingLabelBehavior:
                                                               FloatingLabelBehavior
                                                                   .never,
@@ -601,78 +688,103 @@ class SetPoints extends StatelessWidget {
                                                         ),
                                                       ),
                                                     ),
+                                                    // const SizedBox(width: 20),
+                                                    // SizedBox(
+                                                    //   height: 40,
+                                                    //   width: 150,
+                                                    //   child: TextFormField(
+                                                    //     inputFormatters: <TextInputFormatter>[
+                                                    //       LengthLimitingTextInputFormatter(
+                                                    //           10),
+                                                    //       FilteringTextInputFormatter
+                                                    //           .allow(RegExp(
+                                                    //               "[0-9,.]")),
+                                                    //     ],
+                                                    //     controller: controller
+                                                    //         .npf_reference
+                                                    //         .value,
+                                                    //     keyboardType:
+                                                    //         TextInputType
+                                                    //             .number,
+                                                    //     onChanged: (value) =>
+                                                    //         {},
+                                                    //     validator: (text) {
+                                                    //       if (text!.isEmpty) {
+                                                    //         return '';
+                                                    //       }
+                                                    //       return null;
+                                                    //     },
+                                                    //     decoration:
+                                                    //         InputDecoration(
+                                                    //       errorStyle:
+                                                    //           const TextStyle(
+                                                    //               height: 0),
+                                                    //       isDense: true,
+                                                    //       contentPadding:
+                                                    //           EdgeInsets
+                                                    //               .fromLTRB(
+                                                    //                   10,
+                                                    //                   20,
+                                                    //                   10,
+                                                    //                   0),
+                                                    //       floatingLabelBehavior:
+                                                    //           FloatingLabelBehavior
+                                                    //               .never,
+                                                    //       filled: true,
+                                                    //       fillColor:
+                                                    //           AppColors.white,
+                                                    //       border:
+                                                    //           OutlineInputBorder(
+                                                    //         borderRadius:
+                                                    //             BorderRadius
+                                                    //                 .circular(
+                                                    //                     10.0),
+                                                    //         borderSide: BorderSide(
+                                                    //             color: AppColors
+                                                    //                 .offWhite),
+                                                    //       ),
+                                                    //       enabledBorder:
+                                                    //           OutlineInputBorder(
+                                                    //         borderRadius:
+                                                    //             BorderRadius
+                                                    //                 .circular(
+                                                    //                     10.0),
+                                                    //         borderSide: BorderSide(
+                                                    //             color: AppColors
+                                                    //                 .offWhite),
+                                                    //       ),
+                                                    //       focusedBorder:
+                                                    //           OutlineInputBorder(
+                                                    //         borderRadius:
+                                                    //             BorderRadius
+                                                    //                 .circular(
+                                                    //                     10.0),
+                                                    //         borderSide: BorderSide(
+                                                    //             color: AppColors
+                                                    //                 .offWhite),
+                                                    //       ),
+                                                    //       labelStyle: TextStyle(
+                                                    //           color: AppColors
+                                                    //               .offWhite),
+                                                    //       suffixIcon: Icon(
+                                                    //           Icons.percent,
+                                                    //           color: AppColors
+                                                    //               .offWhite),
+                                                    //     ),
+                                                    //   ),
+                                                    // ),
                                                     const SizedBox(width: 20),
                                                     SizedBox(
-                                                      height: 50,
-                                                      width: 120,
+                                                      height: 40,
+                                                      width: 150,
                                                       child: TextFormField(
-                                                        controller: controller
-                                                            .npf_reference
-                                                            .value,
-                                                        keyboardType:
-                                                            TextInputType
-                                                                .number,
-                                                        onChanged: (value) =>
-                                                            {},
-                                                        validator: (text) {
-                                                          if (text!.isEmpty) {
-                                                            return 'Reference is required';
-                                                          }
-                                                          return null;
-                                                        },
-                                                        decoration:
-                                                            InputDecoration(
-                                                          floatingLabelBehavior:
-                                                              FloatingLabelBehavior
-                                                                  .never,
-                                                          filled: true,
-                                                          fillColor:
-                                                              AppColors.white,
-                                                          border:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          enabledBorder:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          focusedBorder:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          labelStyle: TextStyle(
-                                                              color: AppColors
-                                                                  .offWhite),
-                                                          suffixIcon: Icon(
-                                                              Icons.percent,
-                                                              color: AppColors
-                                                                  .offWhite),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(width: 20),
-                                                    SizedBox(
-                                                      height: 50,
-                                                      width: 120,
-                                                      child: TextFormField(
+                                                        inputFormatters: <TextInputFormatter>[
+                                                          LengthLimitingTextInputFormatter(
+                                                              10),
+                                                          FilteringTextInputFormatter
+                                                              .allow(RegExp(
+                                                                  "[0-9,.]")),
+                                                        ],
                                                         controller: controller
                                                             .npf_low.value,
                                                         keyboardType:
@@ -681,13 +793,29 @@ class SetPoints extends StatelessWidget {
                                                         onChanged: (value) =>
                                                             {},
                                                         validator: (text) {
-                                                          if (text!.isEmpty) {
-                                                            return 'Low is required';
+                                                          if (double.parse(
+                                                                  text!) >=
+                                                              100) {
+                                                            controller
+                                                                    .errorMessage =
+                                                                'Low cannot exceed 100';
+                                                            return '';
                                                           }
                                                           return null;
                                                         },
                                                         decoration:
                                                             InputDecoration(
+                                                          errorStyle:
+                                                              const TextStyle(
+                                                                  height: 0),
+                                                          isDense: true,
+                                                          contentPadding:
+                                                              EdgeInsets
+                                                                  .fromLTRB(
+                                                                      10,
+                                                                      20,
+                                                                      10,
+                                                                      0),
                                                           floatingLabelBehavior:
                                                               FloatingLabelBehavior
                                                                   .never,
@@ -736,9 +864,16 @@ class SetPoints extends StatelessWidget {
                                                     ),
                                                     const SizedBox(width: 20),
                                                     SizedBox(
-                                                      height: 50,
-                                                      width: 120,
+                                                      height: 40,
+                                                      width: 150,
                                                       child: TextFormField(
+                                                        inputFormatters: <TextInputFormatter>[
+                                                          LengthLimitingTextInputFormatter(
+                                                              10),
+                                                          FilteringTextInputFormatter
+                                                              .allow(RegExp(
+                                                                  "[0-9,.]")),
+                                                        ],
                                                         controller: controller
                                                             .npf_lowlow.value,
                                                         keyboardType:
@@ -747,13 +882,29 @@ class SetPoints extends StatelessWidget {
                                                         onChanged: (value) =>
                                                             {},
                                                         validator: (text) {
-                                                          if (text!.isEmpty) {
-                                                            return 'Low Low is required';
+                                                          if (double.parse(
+                                                                  text!) >=
+                                                              100) {
+                                                            controller
+                                                                    .errorMessage =
+                                                                'Low Low cannot exceed 100';
+                                                            return '';
                                                           }
                                                           return null;
                                                         },
                                                         decoration:
                                                             InputDecoration(
+                                                          errorStyle:
+                                                              const TextStyle(
+                                                                  height: 0),
+                                                          isDense: true,
+                                                          contentPadding:
+                                                              EdgeInsets
+                                                                  .fromLTRB(
+                                                                      10,
+                                                                      20,
+                                                                      10,
+                                                                      0),
                                                           floatingLabelBehavior:
                                                               FloatingLabelBehavior
                                                                   .never,
@@ -800,6 +951,24 @@ class SetPoints extends StatelessWidget {
                                                         ),
                                                       ),
                                                     ),
+                                                    const SizedBox(width: 20),
+                                                    Checkbox(
+                                                      value: true,
+                                                      onChanged: (bool? value) {
+                                                        // controller.userAccess(
+                                                        //     controller
+                                                        //         .userManagementListModel!
+                                                        //         .data![index]
+                                                        //         .emailID
+                                                        //         .toString(),
+                                                        //     controller
+                                                        //         .userManagementListModel!
+                                                        //         .data![index]
+                                                        //         .plant
+                                                        //         .toString(),
+                                                        //     value);
+                                                      },
+                                                    ),
                                                   ],
                                                 ),
                                                 const SizedBox(height: 30),
@@ -812,7 +981,7 @@ class SetPoints extends StatelessWidget {
                                                           alignment: Alignment
                                                               .centerLeft,
                                                           child: Text(
-                                                            'Salt Passage',
+                                                            'Normalised Salt Passage',
                                                             style: TextStyle(
                                                                 fontSize: 14,
                                                                 fontWeight:
@@ -822,9 +991,16 @@ class SetPoints extends StatelessWidget {
                                                     ),
                                                     const SizedBox(width: 20),
                                                     SizedBox(
-                                                      height: 50,
-                                                      width: 120,
+                                                      height: 40,
+                                                      width: 150,
                                                       child: TextFormField(
+                                                        inputFormatters: <TextInputFormatter>[
+                                                          LengthLimitingTextInputFormatter(
+                                                              10),
+                                                          FilteringTextInputFormatter
+                                                              .allow(RegExp(
+                                                                  "[0-9,.]")),
+                                                        ],
                                                         controller: controller
                                                             .nsp_highhigh.value,
                                                         keyboardType:
@@ -833,13 +1009,29 @@ class SetPoints extends StatelessWidget {
                                                         onChanged: (value) =>
                                                             {},
                                                         validator: (text) {
-                                                          if (text!.isEmpty) {
-                                                            return 'High High is required';
+                                                          if (double.parse(
+                                                                  text!) >=
+                                                              100) {
+                                                            controller
+                                                                    .errorMessage =
+                                                                'High High cannot exceed 100';
+                                                            return '';
                                                           }
                                                           return null;
                                                         },
                                                         decoration:
                                                             InputDecoration(
+                                                          errorStyle:
+                                                              const TextStyle(
+                                                                  height: 0),
+                                                          isDense: true,
+                                                          contentPadding:
+                                                              EdgeInsets
+                                                                  .fromLTRB(
+                                                                      10,
+                                                                      20,
+                                                                      10,
+                                                                      0),
                                                           floatingLabelBehavior:
                                                               FloatingLabelBehavior
                                                                   .never,
@@ -888,9 +1080,16 @@ class SetPoints extends StatelessWidget {
                                                     ),
                                                     const SizedBox(width: 20),
                                                     SizedBox(
-                                                      height: 50,
-                                                      width: 120,
+                                                      height: 40,
+                                                      width: 150,
                                                       child: TextFormField(
+                                                        inputFormatters: <TextInputFormatter>[
+                                                          LengthLimitingTextInputFormatter(
+                                                              10),
+                                                          FilteringTextInputFormatter
+                                                              .allow(RegExp(
+                                                                  "[0-9,.]")),
+                                                        ],
                                                         controller: controller
                                                             .nsp_high.value,
                                                         keyboardType:
@@ -899,13 +1098,29 @@ class SetPoints extends StatelessWidget {
                                                         onChanged: (value) =>
                                                             {},
                                                         validator: (text) {
-                                                          if (text!.isEmpty) {
-                                                            return 'High is required';
+                                                          if (double.parse(
+                                                                  text!) >=
+                                                              100) {
+                                                            controller
+                                                                    .errorMessage =
+                                                                'High cannot exceed 100';
+                                                            return '';
                                                           }
                                                           return null;
                                                         },
                                                         decoration:
                                                             InputDecoration(
+                                                          errorStyle:
+                                                              const TextStyle(
+                                                                  height: 0),
+                                                          isDense: true,
+                                                          contentPadding:
+                                                              EdgeInsets
+                                                                  .fromLTRB(
+                                                                      10,
+                                                                      20,
+                                                                      10,
+                                                                      0),
                                                           floatingLabelBehavior:
                                                               FloatingLabelBehavior
                                                                   .never,
@@ -952,204 +1167,279 @@ class SetPoints extends StatelessWidget {
                                                         ),
                                                       ),
                                                     ),
+                                                    // const SizedBox(width: 20),
+                                                    // SizedBox(
+                                                    //     height: 40,
+                                                    //     width: 150,
+                                                    //     child:
+                                                    //     TextFormField(
+                                                    //       inputFormatters: <TextInputFormatter>[
+                                                    //         LengthLimitingTextInputFormatter(
+                                                    //             10),
+                                                    //         FilteringTextInputFormatter
+                                                    //             .allow(RegExp(
+                                                    //                 "[0-9,.]")),
+                                                    //       ],
+                                                    //       controller: controller
+                                                    //           .nsp_reference
+                                                    //           .value,
+                                                    //       keyboardType:
+                                                    //           TextInputType
+                                                    //               .number,
+                                                    //       onChanged: (value) =>
+                                                    //           {},
+                                                    //       validator: (text) {
+                                                    //         if (text!.isEmpty) {
+                                                    //           return '';
+                                                    //         }
+                                                    //         return null;
+                                                    //       },
+                                                    //       decoration:
+                                                    //           InputDecoration(
+                                                    //         errorStyle:
+                                                    //             const TextStyle(
+                                                    //                 height: 0),
+                                                    //         isDense: true,
+                                                    //         contentPadding:
+                                                    //             EdgeInsets
+                                                    //                 .fromLTRB(
+                                                    //                     10,
+                                                    //                     20,
+                                                    //                     10,
+                                                    //                     0),
+                                                    //         floatingLabelBehavior:
+                                                    //             FloatingLabelBehavior
+                                                    //                 .never,
+                                                    //         filled: true,
+                                                    //         fillColor:
+                                                    //             AppColors.white,
+                                                    //         border:
+                                                    //             OutlineInputBorder(
+                                                    //           borderRadius:
+                                                    //               BorderRadius
+                                                    //                   .circular(
+                                                    //                       10.0),
+                                                    //           borderSide: BorderSide(
+                                                    //               color: AppColors
+                                                    //                   .offWhite),
+                                                    //         ),
+                                                    //         enabledBorder:
+                                                    //             OutlineInputBorder(
+                                                    //           borderRadius:
+                                                    //               BorderRadius
+                                                    //                   .circular(
+                                                    //                       10.0),
+                                                    //           borderSide: BorderSide(
+                                                    //               color: AppColors
+                                                    //                   .offWhite),
+                                                    //         ),
+                                                    //         focusedBorder:
+                                                    //             OutlineInputBorder(
+                                                    //           borderRadius:
+                                                    //               BorderRadius
+                                                    //                   .circular(
+                                                    //                       10.0),
+                                                    //           borderSide: BorderSide(
+                                                    //               color: AppColors
+                                                    //                   .offWhite),
+                                                    //         ),
+                                                    //         labelStyle: TextStyle(
+                                                    //             color: AppColors
+                                                    //                 .offWhite),
+                                                    //         suffixIcon: Icon(
+                                                    //             Icons.percent,
+                                                    //             color: AppColors
+                                                    //                 .offWhite),
+                                                    //       ),
+                                                    //     ),
+                                                    //     ),
                                                     const SizedBox(width: 20),
                                                     SizedBox(
-                                                      height: 50,
-                                                      width: 120,
-                                                      child: TextFormField(
-                                                        controller: controller
-                                                            .nsp_reference
-                                                            .value,
-                                                        keyboardType:
-                                                            TextInputType
-                                                                .number,
-                                                        onChanged: (value) =>
-                                                            {},
-                                                        validator: (text) {
-                                                          if (text!.isEmpty) {
-                                                            return 'Reference is required';
-                                                          }
-                                                          return null;
-                                                        },
-                                                        decoration:
-                                                            InputDecoration(
-                                                          floatingLabelBehavior:
-                                                              FloatingLabelBehavior
-                                                                  .never,
-                                                          filled: true,
-                                                          fillColor:
-                                                              AppColors.white,
-                                                          border:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          enabledBorder:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          focusedBorder:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          labelStyle: TextStyle(
-                                                              color: AppColors
-                                                                  .offWhite),
-                                                          suffixIcon: Icon(
-                                                              Icons.percent,
-                                                              color: AppColors
-                                                                  .offWhite),
-                                                        ),
-                                                      ),
+                                                      height: 40,
+                                                      width: 150,
+                                                      child: Container(),
+                                                      // TextFormField(
+                                                      //   inputFormatters: <TextInputFormatter>[
+                                                      //     LengthLimitingTextInputFormatter(
+                                                      //         10),
+                                                      //     FilteringTextInputFormatter
+                                                      //         .allow(RegExp(
+                                                      //             "[0-9,.]")),
+                                                      //   ],
+                                                      //   controller: controller
+                                                      //       .nsp_low.value,
+                                                      //   keyboardType:
+                                                      //       TextInputType
+                                                      //           .number,
+                                                      //   onChanged: (value) =>
+                                                      //       {},
+                                                      //   validator: (text) {
+                                                      //     if (text!.isEmpty) {
+                                                      //       return '';
+                                                      //     }
+                                                      //     return null;
+                                                      //   },
+                                                      //   decoration:
+                                                      //       InputDecoration(
+                                                      //     errorStyle:
+                                                      //         const TextStyle(
+                                                      //             height: 0),
+                                                      //     isDense: true,
+                                                      //     contentPadding:
+                                                      //         EdgeInsets
+                                                      //             .fromLTRB(
+                                                      //                 10,
+                                                      //                 20,
+                                                      //                 10,
+                                                      //                 0),
+                                                      //     floatingLabelBehavior:
+                                                      //         FloatingLabelBehavior
+                                                      //             .never,
+                                                      //     filled: true,
+                                                      //     fillColor:
+                                                      //         AppColors.white,
+                                                      //     border:
+                                                      //         OutlineInputBorder(
+                                                      //       borderRadius:
+                                                      //           BorderRadius
+                                                      //               .circular(
+                                                      //                   10.0),
+                                                      //       borderSide: BorderSide(
+                                                      //           color: AppColors
+                                                      //               .offWhite),
+                                                      //     ),
+                                                      //     enabledBorder:
+                                                      //         OutlineInputBorder(
+                                                      //       borderRadius:
+                                                      //           BorderRadius
+                                                      //               .circular(
+                                                      //                   10.0),
+                                                      //       borderSide: BorderSide(
+                                                      //           color: AppColors
+                                                      //               .offWhite),
+                                                      //     ),
+                                                      //     focusedBorder:
+                                                      //         OutlineInputBorder(
+                                                      //       borderRadius:
+                                                      //           BorderRadius
+                                                      //               .circular(
+                                                      //                   10.0),
+                                                      //       borderSide: BorderSide(
+                                                      //           color: AppColors
+                                                      //               .offWhite),
+                                                      //     ),
+                                                      //     labelStyle: TextStyle(
+                                                      //         color: AppColors
+                                                      //             .offWhite),
+                                                      //     suffixIcon: Icon(
+                                                      //         Icons.percent,
+                                                      //         color: AppColors
+                                                      //             .offWhite),
+                                                      //   ),
+                                                      // ),
                                                     ),
                                                     const SizedBox(width: 20),
                                                     SizedBox(
-                                                      height: 50,
-                                                      width: 120,
-                                                      child: TextFormField(
-                                                        controller: controller
-                                                            .nsp_low.value,
-                                                        keyboardType:
-                                                            TextInputType
-                                                                .number,
-                                                        onChanged: (value) =>
-                                                            {},
-                                                        validator: (text) {
-                                                          if (text!.isEmpty) {
-                                                            return 'Low is required';
-                                                          }
-                                                          return null;
-                                                        },
-                                                        decoration:
-                                                            InputDecoration(
-                                                          floatingLabelBehavior:
-                                                              FloatingLabelBehavior
-                                                                  .never,
-                                                          filled: true,
-                                                          fillColor:
-                                                              AppColors.white,
-                                                          border:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          enabledBorder:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          focusedBorder:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          labelStyle: TextStyle(
-                                                              color: AppColors
-                                                                  .offWhite),
-                                                          suffixIcon: Icon(
-                                                              Icons.percent,
-                                                              color: AppColors
-                                                                  .offWhite),
-                                                        ),
-                                                      ),
+                                                      height: 40,
+                                                      width: 150,
+                                                      child: Container(),
+                                                      // TextFormField(
+                                                      //   inputFormatters: <TextInputFormatter>[
+                                                      //     LengthLimitingTextInputFormatter(
+                                                      //         10),
+                                                      //     FilteringTextInputFormatter
+                                                      //         .allow(RegExp(
+                                                      //             "[0-9,.]")),
+                                                      //   ],
+                                                      //   controller: controller
+                                                      //       .nsp_lowlow.value,
+                                                      //   keyboardType:
+                                                      //       TextInputType
+                                                      //           .number,
+                                                      //   onChanged: (value) =>
+                                                      //       {},
+                                                      //   validator: (text) {
+                                                      //     if (text!.isEmpty) {
+                                                      //       return '';
+                                                      //     }
+                                                      //     return null;
+                                                      //   },
+                                                      //   decoration:
+                                                      //       InputDecoration(
+                                                      //     errorStyle:
+                                                      //         const TextStyle(
+                                                      //             height: 0),
+                                                      //     isDense: true,
+                                                      //     contentPadding:
+                                                      //         EdgeInsets
+                                                      //             .fromLTRB(
+                                                      //                 10,
+                                                      //                 20,
+                                                      //                 10,
+                                                      //                 0),
+                                                      //     floatingLabelBehavior:
+                                                      //         FloatingLabelBehavior
+                                                      //             .never,
+                                                      //     filled: true,
+                                                      //     fillColor:
+                                                      //         AppColors.white,
+                                                      //     border:
+                                                      //         OutlineInputBorder(
+                                                      //       borderRadius:
+                                                      //           BorderRadius
+                                                      //               .circular(
+                                                      //                   10.0),
+                                                      //       borderSide: BorderSide(
+                                                      //           color: AppColors
+                                                      //               .offWhite),
+                                                      //     ),
+                                                      //     enabledBorder:
+                                                      //         OutlineInputBorder(
+                                                      //       borderRadius:
+                                                      //           BorderRadius
+                                                      //               .circular(
+                                                      //                   10.0),
+                                                      //       borderSide: BorderSide(
+                                                      //           color: AppColors
+                                                      //               .offWhite),
+                                                      //     ),
+                                                      //     focusedBorder:
+                                                      //         OutlineInputBorder(
+                                                      //       borderRadius:
+                                                      //           BorderRadius
+                                                      //               .circular(
+                                                      //                   10.0),
+                                                      //       borderSide: BorderSide(
+                                                      //           color: AppColors
+                                                      //               .offWhite),
+                                                      //     ),
+                                                      //     labelStyle: TextStyle(
+                                                      //         color: AppColors
+                                                      //             .offWhite),
+                                                      //     suffixIcon: Icon(
+                                                      //         Icons.percent,
+                                                      //         color: AppColors
+                                                      //             .offWhite),
+                                                      //   ),
+                                                      // ),
                                                     ),
                                                     const SizedBox(width: 20),
-                                                    SizedBox(
-                                                      height: 50,
-                                                      width: 120,
-                                                      child: TextFormField(
-                                                        controller: controller
-                                                            .nsp_lowlow.value,
-                                                        keyboardType:
-                                                            TextInputType
-                                                                .number,
-                                                        onChanged: (value) =>
-                                                            {},
-                                                        validator: (text) {
-                                                          if (text!.isEmpty) {
-                                                            return 'Low Low is required';
-                                                          }
-                                                          return null;
-                                                        },
-                                                        decoration:
-                                                            InputDecoration(
-                                                          floatingLabelBehavior:
-                                                              FloatingLabelBehavior
-                                                                  .never,
-                                                          filled: true,
-                                                          fillColor:
-                                                              AppColors.white,
-                                                          border:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          enabledBorder:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          focusedBorder:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          labelStyle: TextStyle(
-                                                              color: AppColors
-                                                                  .offWhite),
-                                                          suffixIcon: Icon(
-                                                              Icons.percent,
-                                                              color: AppColors
-                                                                  .offWhite),
-                                                        ),
-                                                      ),
+                                                    Checkbox(
+                                                      value: true,
+                                                      onChanged: (bool? value) {
+                                                        // controller.userAccess(
+                                                        //     controller
+                                                        //         .userManagementListModel!
+                                                        //         .data![index]
+                                                        //         .emailID
+                                                        //         .toString(),
+                                                        //     controller
+                                                        //         .userManagementListModel!
+                                                        //         .data![index]
+                                                        //         .plant
+                                                        //         .toString(),
+                                                        //     value);
+                                                      },
                                                     ),
                                                   ],
                                                 ),
@@ -1163,7 +1453,7 @@ class SetPoints extends StatelessWidget {
                                                           alignment: Alignment
                                                               .centerLeft,
                                                           child: Text(
-                                                            'DP',
+                                                            'Normalised DP',
                                                             style: TextStyle(
                                                                 fontSize: 14,
                                                                 fontWeight:
@@ -1173,9 +1463,16 @@ class SetPoints extends StatelessWidget {
                                                     ),
                                                     const SizedBox(width: 20),
                                                     SizedBox(
-                                                      height: 50,
-                                                      width: 120,
+                                                      height: 40,
+                                                      width: 150,
                                                       child: TextFormField(
+                                                        inputFormatters: <TextInputFormatter>[
+                                                          LengthLimitingTextInputFormatter(
+                                                              10),
+                                                          FilteringTextInputFormatter
+                                                              .allow(RegExp(
+                                                                  "[0-9,.]")),
+                                                        ],
                                                         controller: controller
                                                             .ndp_highhigh.value,
                                                         keyboardType:
@@ -1184,13 +1481,29 @@ class SetPoints extends StatelessWidget {
                                                         onChanged: (value) =>
                                                             {},
                                                         validator: (text) {
-                                                          if (text!.isEmpty) {
-                                                            return 'High High required';
+                                                          if (double.parse(
+                                                                  text!) >=
+                                                              100) {
+                                                            controller
+                                                                    .errorMessage =
+                                                                'High High cannot exceed 100';
+                                                            return '';
                                                           }
                                                           return null;
                                                         },
                                                         decoration:
                                                             InputDecoration(
+                                                          errorStyle:
+                                                              const TextStyle(
+                                                                  height: 0),
+                                                          isDense: true,
+                                                          contentPadding:
+                                                              EdgeInsets
+                                                                  .fromLTRB(
+                                                                      10,
+                                                                      20,
+                                                                      10,
+                                                                      0),
                                                           floatingLabelBehavior:
                                                               FloatingLabelBehavior
                                                                   .never,
@@ -1239,9 +1552,16 @@ class SetPoints extends StatelessWidget {
                                                     ),
                                                     const SizedBox(width: 20),
                                                     SizedBox(
-                                                      height: 50,
-                                                      width: 120,
+                                                      height: 40,
+                                                      width: 150,
                                                       child: TextFormField(
+                                                        inputFormatters: <TextInputFormatter>[
+                                                          LengthLimitingTextInputFormatter(
+                                                              10),
+                                                          FilteringTextInputFormatter
+                                                              .allow(RegExp(
+                                                                  "[0-9,.]")),
+                                                        ],
                                                         controller: controller
                                                             .ndp_high.value,
                                                         keyboardType:
@@ -1250,13 +1570,29 @@ class SetPoints extends StatelessWidget {
                                                         onChanged: (value) =>
                                                             {},
                                                         validator: (text) {
-                                                          if (text!.isEmpty) {
-                                                            return 'High is required';
+                                                          if (double.parse(
+                                                                  text!) >=
+                                                              100) {
+                                                            controller
+                                                                    .errorMessage =
+                                                                'High cannot exceed 100';
+                                                            return '';
                                                           }
                                                           return null;
                                                         },
                                                         decoration:
                                                             InputDecoration(
+                                                          errorStyle:
+                                                              const TextStyle(
+                                                                  height: 0),
+                                                          isDense: true,
+                                                          contentPadding:
+                                                              EdgeInsets
+                                                                  .fromLTRB(
+                                                                      10,
+                                                                      20,
+                                                                      10,
+                                                                      0),
                                                           floatingLabelBehavior:
                                                               FloatingLabelBehavior
                                                                   .never,
@@ -1303,560 +1639,721 @@ class SetPoints extends StatelessWidget {
                                                         ),
                                                       ),
                                                     ),
+                                                    // const SizedBox(width: 20),
+                                                    // SizedBox(
+                                                    //   height: 40,
+                                                    //   width: 150,
+                                                    //   child: TextFormField(
+                                                    //     inputFormatters: <TextInputFormatter>[
+                                                    //       LengthLimitingTextInputFormatter(
+                                                    //           10),
+                                                    //       FilteringTextInputFormatter
+                                                    //           .allow(RegExp(
+                                                    //               "[0-9,.]")),
+                                                    //     ],
+                                                    //     controller: controller
+                                                    //         .ndp_reference
+                                                    //         .value,
+                                                    //     keyboardType:
+                                                    //         TextInputType
+                                                    //             .number,
+                                                    //     onChanged: (value) =>
+                                                    //         {},
+                                                    //     validator: (text) {
+                                                    //       if (text!.isEmpty) {
+                                                    //         return '';
+                                                    //       }
+                                                    //       return null;
+                                                    //     },
+                                                    //     decoration:
+                                                    //         InputDecoration(
+                                                    //       errorStyle:
+                                                    //           const TextStyle(
+                                                    //               height: 0),
+                                                    //       isDense: true,
+                                                    //       contentPadding:
+                                                    //           EdgeInsets
+                                                    //               .fromLTRB(
+                                                    //                   10,
+                                                    //                   20,
+                                                    //                   10,
+                                                    //                   0),
+                                                    //       floatingLabelBehavior:
+                                                    //           FloatingLabelBehavior
+                                                    //               .never,
+                                                    //       filled: true,
+                                                    //       fillColor:
+                                                    //           AppColors.white,
+                                                    //       border:
+                                                    //           OutlineInputBorder(
+                                                    //         borderRadius:
+                                                    //             BorderRadius
+                                                    //                 .circular(
+                                                    //                     10.0),
+                                                    //         borderSide: BorderSide(
+                                                    //             color: AppColors
+                                                    //                 .offWhite),
+                                                    //       ),
+                                                    //       enabledBorder:
+                                                    //           OutlineInputBorder(
+                                                    //         borderRadius:
+                                                    //             BorderRadius
+                                                    //                 .circular(
+                                                    //                     10.0),
+                                                    //         borderSide: BorderSide(
+                                                    //             color: AppColors
+                                                    //                 .offWhite),
+                                                    //       ),
+                                                    //       focusedBorder:
+                                                    //           OutlineInputBorder(
+                                                    //         borderRadius:
+                                                    //             BorderRadius
+                                                    //                 .circular(
+                                                    //                     10.0),
+                                                    //         borderSide: BorderSide(
+                                                    //             color: AppColors
+                                                    //                 .offWhite),
+                                                    //       ),
+                                                    //       labelStyle: TextStyle(
+                                                    //           color: AppColors
+                                                    //               .offWhite),
+                                                    //       suffixIcon: Icon(
+                                                    //           Icons.percent,
+                                                    //           color: AppColors
+                                                    //               .offWhite),
+                                                    //     ),
+                                                    //   ),
+                                                    // ),
                                                     const SizedBox(width: 20),
                                                     SizedBox(
-                                                      height: 50,
-                                                      width: 120,
-                                                      child: TextFormField(
-                                                        controller: controller
-                                                            .ndp_reference
-                                                            .value,
-                                                        keyboardType:
-                                                            TextInputType
-                                                                .number,
-                                                        onChanged: (value) =>
-                                                            {},
-                                                        validator: (text) {
-                                                          if (text!.isEmpty) {
-                                                            return 'Reference is required';
-                                                          }
-                                                          return null;
-                                                        },
-                                                        decoration:
-                                                            InputDecoration(
-                                                          floatingLabelBehavior:
-                                                              FloatingLabelBehavior
-                                                                  .never,
-                                                          filled: true,
-                                                          fillColor:
-                                                              AppColors.white,
-                                                          border:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          enabledBorder:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          focusedBorder:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          labelStyle: TextStyle(
-                                                              color: AppColors
-                                                                  .offWhite),
-                                                          suffixIcon: Icon(
-                                                              Icons.percent,
-                                                              color: AppColors
-                                                                  .offWhite),
-                                                        ),
-                                                      ),
+                                                      height: 40,
+                                                      width: 150,
+                                                      child: Container(),
+                                                      // TextFormField(
+                                                      //   inputFormatters: <TextInputFormatter>[
+                                                      //     LengthLimitingTextInputFormatter(
+                                                      //         10),
+                                                      //     FilteringTextInputFormatter
+                                                      //         .allow(RegExp(
+                                                      //             "[0-9,.]")),
+                                                      //   ],
+                                                      //   controller: controller
+                                                      //       .ndp_low.value,
+                                                      //   keyboardType:
+                                                      //       TextInputType
+                                                      //           .number,
+                                                      //   onChanged: (value) =>
+                                                      //       {},
+                                                      //   validator: (text) {
+                                                      //     if (text!.isEmpty) {
+                                                      //       return '';
+                                                      //     }
+                                                      //     return null;
+                                                      //   },
+                                                      //   decoration:
+                                                      //       InputDecoration(
+                                                      //     errorStyle:
+                                                      //         const TextStyle(
+                                                      //             height: 0),
+                                                      //     isDense: true,
+                                                      //     contentPadding:
+                                                      //         EdgeInsets
+                                                      //             .fromLTRB(
+                                                      //                 10,
+                                                      //                 20,
+                                                      //                 10,
+                                                      //                 0),
+                                                      //     floatingLabelBehavior:
+                                                      //         FloatingLabelBehavior
+                                                      //             .never,
+                                                      //     filled: true,
+                                                      //     fillColor:
+                                                      //         AppColors.white,
+                                                      //     border:
+                                                      //         OutlineInputBorder(
+                                                      //       borderRadius:
+                                                      //           BorderRadius
+                                                      //               .circular(
+                                                      //                   10.0),
+                                                      //       borderSide: BorderSide(
+                                                      //           color: AppColors
+                                                      //               .offWhite),
+                                                      //     ),
+                                                      //     enabledBorder:
+                                                      //         OutlineInputBorder(
+                                                      //       borderRadius:
+                                                      //           BorderRadius
+                                                      //               .circular(
+                                                      //                   10.0),
+                                                      //       borderSide: BorderSide(
+                                                      //           color: AppColors
+                                                      //               .offWhite),
+                                                      //     ),
+                                                      //     focusedBorder:
+                                                      //         OutlineInputBorder(
+                                                      //       borderRadius:
+                                                      //           BorderRadius
+                                                      //               .circular(
+                                                      //                   10.0),
+                                                      //       borderSide: BorderSide(
+                                                      //           color: AppColors
+                                                      //               .offWhite),
+                                                      //     ),
+                                                      //     labelStyle: TextStyle(
+                                                      //         color: AppColors
+                                                      //             .offWhite),
+                                                      //     suffixIcon: Icon(
+                                                      //         Icons.percent,
+                                                      //         color: AppColors
+                                                      //             .offWhite),
+                                                      //   ),
+                                                      // ),
                                                     ),
                                                     const SizedBox(width: 20),
                                                     SizedBox(
-                                                      height: 50,
-                                                      width: 120,
-                                                      child: TextFormField(
-                                                        controller: controller
-                                                            .ndp_low.value,
-                                                        keyboardType:
-                                                            TextInputType
-                                                                .number,
-                                                        onChanged: (value) =>
-                                                            {},
-                                                        validator: (text) {
-                                                          if (text!.isEmpty) {
-                                                            return 'Low is required';
-                                                          }
-                                                          return null;
-                                                        },
-                                                        decoration:
-                                                            InputDecoration(
-                                                          floatingLabelBehavior:
-                                                              FloatingLabelBehavior
-                                                                  .never,
-                                                          filled: true,
-                                                          fillColor:
-                                                              AppColors.white,
-                                                          border:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          enabledBorder:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          focusedBorder:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          labelStyle: TextStyle(
-                                                              color: AppColors
-                                                                  .offWhite),
-                                                          suffixIcon: Icon(
-                                                              Icons.percent,
-                                                              color: AppColors
-                                                                  .offWhite),
-                                                        ),
-                                                      ),
+                                                      height: 40,
+                                                      width: 150,
+                                                      child: Container(),
+                                                      // TextFormField(
+                                                      //   inputFormatters: <TextInputFormatter>[
+                                                      //     LengthLimitingTextInputFormatter(
+                                                      //         10),
+                                                      //     FilteringTextInputFormatter
+                                                      //         .allow(RegExp(
+                                                      //             "[0-9,.]")),
+                                                      //   ],
+                                                      //   controller: controller
+                                                      //       .ndp_lowlow.value,
+                                                      //   keyboardType:
+                                                      //       TextInputType
+                                                      //           .number,
+                                                      //   onChanged: (value) =>
+                                                      //       {},
+                                                      //   validator: (text) {
+                                                      //     if (text!.isEmpty) {
+                                                      //       return '';
+                                                      //     }
+                                                      //     return null;
+                                                      //   },
+                                                      //   decoration:
+                                                      //       InputDecoration(
+                                                      //     errorStyle:
+                                                      //         const TextStyle(
+                                                      //             height: 0),
+                                                      //     isDense: true,
+                                                      //     contentPadding:
+                                                      //         EdgeInsets
+                                                      //             .fromLTRB(
+                                                      //                 10,
+                                                      //                 20,
+                                                      //                 10,
+                                                      //                 0),
+                                                      //     floatingLabelBehavior:
+                                                      //         FloatingLabelBehavior
+                                                      //             .never,
+                                                      //     filled: true,
+                                                      //     fillColor:
+                                                      //         AppColors.white,
+                                                      //     border:
+                                                      //         OutlineInputBorder(
+                                                      //       borderRadius:
+                                                      //           BorderRadius
+                                                      //               .circular(
+                                                      //                   10.0),
+                                                      //       borderSide: BorderSide(
+                                                      //           color: AppColors
+                                                      //               .offWhite),
+                                                      //     ),
+                                                      //     enabledBorder:
+                                                      //         OutlineInputBorder(
+                                                      //       borderRadius:
+                                                      //           BorderRadius
+                                                      //               .circular(
+                                                      //                   10.0),
+                                                      //       borderSide: BorderSide(
+                                                      //           color: AppColors
+                                                      //               .offWhite),
+                                                      //     ),
+                                                      //     focusedBorder:
+                                                      //         OutlineInputBorder(
+                                                      //       borderRadius:
+                                                      //           BorderRadius
+                                                      //               .circular(
+                                                      //                   10.0),
+                                                      //       borderSide: BorderSide(
+                                                      //           color: AppColors
+                                                      //               .offWhite),
+                                                      //     ),
+                                                      //     labelStyle: TextStyle(
+                                                      //         color: AppColors
+                                                      //             .offWhite),
+                                                      //     suffixIcon: Icon(
+                                                      //         Icons.percent,
+                                                      //         color: AppColors
+                                                      //             .offWhite),
+                                                      //   ),
+                                                      // ),
                                                     ),
                                                     const SizedBox(width: 20),
-                                                    SizedBox(
-                                                      height: 50,
-                                                      width: 120,
-                                                      child: TextFormField(
-                                                        controller: controller
-                                                            .ndp_lowlow.value,
-                                                        keyboardType:
-                                                            TextInputType
-                                                                .number,
-                                                        onChanged: (value) =>
-                                                            {},
-                                                        validator: (text) {
-                                                          if (text!.isEmpty) {
-                                                            return 'Low Low is required';
-                                                          }
-                                                          return null;
-                                                        },
-                                                        decoration:
-                                                            InputDecoration(
-                                                          floatingLabelBehavior:
-                                                              FloatingLabelBehavior
-                                                                  .never,
-                                                          filled: true,
-                                                          fillColor:
-                                                              AppColors.white,
-                                                          border:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          enabledBorder:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          focusedBorder:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          labelStyle: TextStyle(
-                                                              color: AppColors
-                                                                  .offWhite),
-                                                          suffixIcon: Icon(
-                                                              Icons.percent,
-                                                              color: AppColors
-                                                                  .offWhite),
-                                                        ),
-                                                      ),
+                                                    Checkbox(
+                                                      value: true,
+                                                      onChanged: (bool? value) {
+                                                        // controller.userAccess(
+                                                        //     controller
+                                                        //         .userManagementListModel!
+                                                        //         .data![index]
+                                                        //         .emailID
+                                                        //         .toString(),
+                                                        //     controller
+                                                        //         .userManagementListModel!
+                                                        //         .data![index]
+                                                        //         .plant
+                                                        //         .toString(),
+                                                        //     value);
+                                                      },
                                                     ),
                                                   ],
                                                 ),
                                                 const SizedBox(height: 30),
-                                                Row(
-                                                  children: [
-                                                    const SizedBox(
-                                                      height: 50,
-                                                      width: 120,
-                                                      child: Align(
-                                                          alignment: Alignment
-                                                              .centerLeft,
-                                                          child: Text(
-                                                            'Energy',
-                                                            style: TextStyle(
-                                                                fontSize: 14,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                          )),
-                                                    ),
-                                                    const SizedBox(width: 20),
-                                                    SizedBox(
-                                                      height: 50,
-                                                      width: 120,
-                                                      child: TextFormField(
-                                                        controller: controller
-                                                            .energy_highhigh
-                                                            .value,
-                                                        keyboardType:
-                                                            TextInputType
-                                                                .number,
-                                                        onChanged: (value) =>
-                                                            {},
-                                                        validator: (text) {
-                                                          if (text!.isEmpty) {
-                                                            return 'High High is required';
-                                                          }
-                                                          return null;
-                                                        },
-                                                        decoration:
-                                                            InputDecoration(
-                                                          floatingLabelBehavior:
-                                                              FloatingLabelBehavior
-                                                                  .never,
-                                                          filled: true,
-                                                          fillColor:
-                                                              AppColors.white,
-                                                          border:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          enabledBorder:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          focusedBorder:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          labelStyle: TextStyle(
-                                                              color: AppColors
-                                                                  .offWhite),
-                                                          suffixIcon: Icon(
-                                                              Icons.percent,
-                                                              color: AppColors
-                                                                  .offWhite),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(width: 20),
-                                                    SizedBox(
-                                                      height: 50,
-                                                      width: 120,
-                                                      child: TextFormField(
-                                                        controller: controller
-                                                            .energy_high.value,
-                                                        keyboardType:
-                                                            TextInputType
-                                                                .number,
-                                                        onChanged: (value) =>
-                                                            {},
-                                                        validator: (text) {
-                                                          if (text!.isEmpty) {
-                                                            return 'High is required';
-                                                          }
-                                                          return null;
-                                                        },
-                                                        decoration:
-                                                            InputDecoration(
-                                                          floatingLabelBehavior:
-                                                              FloatingLabelBehavior
-                                                                  .never,
-                                                          filled: true,
-                                                          fillColor:
-                                                              AppColors.white,
-                                                          border:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          enabledBorder:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          focusedBorder:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          labelStyle: TextStyle(
-                                                              color: AppColors
-                                                                  .offWhite),
-                                                          suffixIcon: Icon(
-                                                              Icons.percent,
-                                                              color: AppColors
-                                                                  .offWhite),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(width: 20),
-                                                    SizedBox(
-                                                      height: 50,
-                                                      width: 120,
-                                                      child: TextFormField(
-                                                        controller: controller
-                                                            .energy_reference
-                                                            .value,
-                                                        keyboardType:
-                                                            TextInputType
-                                                                .number,
-                                                        onChanged: (value) =>
-                                                            {},
-                                                        validator: (text) {
-                                                          if (text!.isEmpty) {
-                                                            return 'Reference is required';
-                                                          }
-                                                          return null;
-                                                        },
-                                                        decoration:
-                                                            InputDecoration(
-                                                          floatingLabelBehavior:
-                                                              FloatingLabelBehavior
-                                                                  .never,
-                                                          filled: true,
-                                                          fillColor:
-                                                              AppColors.white,
-                                                          border:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          enabledBorder:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          focusedBorder:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          labelStyle: TextStyle(
-                                                              color: AppColors
-                                                                  .offWhite),
-                                                          suffixIcon: Icon(
-                                                              Icons.percent,
-                                                              color: AppColors
-                                                                  .offWhite),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(width: 20),
-                                                    SizedBox(
-                                                      height: 50,
-                                                      width: 120,
-                                                      child: TextFormField(
-                                                        controller: controller
-                                                            .energy_low.value,
-                                                        keyboardType:
-                                                            TextInputType
-                                                                .number,
-                                                        onChanged: (value) =>
-                                                            {},
-                                                        validator: (text) {
-                                                          if (text!.isEmpty) {
-                                                            return 'Low is required';
-                                                          }
-                                                          return null;
-                                                        },
-                                                        decoration:
-                                                            InputDecoration(
-                                                          floatingLabelBehavior:
-                                                              FloatingLabelBehavior
-                                                                  .never,
-                                                          filled: true,
-                                                          fillColor:
-                                                              AppColors.white,
-                                                          border:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          enabledBorder:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          focusedBorder:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          labelStyle: TextStyle(
-                                                              color: AppColors
-                                                                  .offWhite),
-                                                          suffixIcon: Icon(
-                                                              Icons.percent,
-                                                              color: AppColors
-                                                                  .offWhite),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(width: 20),
-                                                    SizedBox(
-                                                      height: 50,
-                                                      width: 120,
-                                                      child: TextFormField(
-                                                        controller: controller
-                                                            .energy_lowlow
-                                                            .value,
-                                                        keyboardType:
-                                                            TextInputType
-                                                                .number,
-                                                        onChanged: (value) =>
-                                                            {},
-                                                        validator: (text) {
-                                                          if (text!.isEmpty) {
-                                                            return 'Low Low is required';
-                                                          }
-                                                          return null;
-                                                        },
-                                                        decoration:
-                                                            InputDecoration(
-                                                          floatingLabelBehavior:
-                                                              FloatingLabelBehavior
-                                                                  .never,
-                                                          filled: true,
-                                                          fillColor:
-                                                              AppColors.white,
-                                                          border:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          enabledBorder:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          focusedBorder:
-                                                              OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            borderSide: BorderSide(
-                                                                color: AppColors
-                                                                    .offWhite),
-                                                          ),
-                                                          labelStyle: TextStyle(
-                                                              color: AppColors
-                                                                  .offWhite),
-                                                          suffixIcon: Icon(
-                                                              Icons.percent,
-                                                              color: AppColors
-                                                                  .offWhite),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
+                                                // Row(
+                                                //   children: [
+                                                //     const SizedBox(
+                                                //       height: 50,
+                                                //       width: 120,
+                                                //       child: Align(
+                                                //           alignment: Alignment
+                                                //               .centerLeft,
+                                                //           child: Text(
+                                                //             'Energy',
+                                                //             style: TextStyle(
+                                                //                 fontSize: 14,
+                                                //                 fontWeight:
+                                                //                     FontWeight
+                                                //                         .bold),
+                                                //           )),
+                                                //     ),
+                                                //     const SizedBox(width: 20),
+                                                //     SizedBox(
+                                                //       height: 40,
+                                                //       width: 150,
+                                                //       child: TextFormField(
+                                                //         inputFormatters: <TextInputFormatter>[
+                                                //           LengthLimitingTextInputFormatter(
+                                                //               10),
+                                                //           FilteringTextInputFormatter
+                                                //               .allow(RegExp(
+                                                //                   "[0-9,.]")),
+                                                //         ],
+                                                //         controller: controller
+                                                //             .energy_highhigh
+                                                //             .value,
+                                                //         keyboardType:
+                                                //             TextInputType
+                                                //                 .number,
+                                                //         onChanged: (value) =>
+                                                //             {},
+                                                //         validator: (text) {
+                                                //           if (text!.isEmpty) {
+                                                //             return '';
+                                                //           }
+                                                //           return null;
+                                                //         },
+                                                //         decoration:
+                                                //             InputDecoration(
+                                                //           errorStyle:
+                                                //               const TextStyle(
+                                                //                   height: 0),
+                                                //           isDense: true,
+                                                //           contentPadding:
+                                                //               EdgeInsets
+                                                //                   .fromLTRB(
+                                                //                       10,
+                                                //                       20,
+                                                //                       10,
+                                                //                       0),
+                                                //           floatingLabelBehavior:
+                                                //               FloatingLabelBehavior
+                                                //                   .never,
+                                                //           filled: true,
+                                                //           fillColor:
+                                                //               AppColors.white,
+                                                //           border:
+                                                //               OutlineInputBorder(
+                                                //             borderRadius:
+                                                //                 BorderRadius
+                                                //                     .circular(
+                                                //                         10.0),
+                                                //             borderSide: BorderSide(
+                                                //                 color: AppColors
+                                                //                     .offWhite),
+                                                //           ),
+                                                //           enabledBorder:
+                                                //               OutlineInputBorder(
+                                                //             borderRadius:
+                                                //                 BorderRadius
+                                                //                     .circular(
+                                                //                         10.0),
+                                                //             borderSide: BorderSide(
+                                                //                 color: AppColors
+                                                //                     .offWhite),
+                                                //           ),
+                                                //           focusedBorder:
+                                                //               OutlineInputBorder(
+                                                //             borderRadius:
+                                                //                 BorderRadius
+                                                //                     .circular(
+                                                //                         10.0),
+                                                //             borderSide: BorderSide(
+                                                //                 color: AppColors
+                                                //                     .offWhite),
+                                                //           ),
+                                                //           labelStyle: TextStyle(
+                                                //               color: AppColors
+                                                //                   .offWhite),
+                                                //           suffixIcon: Icon(
+                                                //               Icons.percent,
+                                                //               color: AppColors
+                                                //                   .offWhite),
+                                                //         ),
+                                                //       ),
+                                                //     ),
+                                                //     const SizedBox(width: 20),
+                                                //     SizedBox(
+                                                //       height: 40,
+                                                //       width: 150,
+                                                //       child: TextFormField(
+                                                //         inputFormatters: <TextInputFormatter>[
+                                                //           LengthLimitingTextInputFormatter(
+                                                //               10),
+                                                //           FilteringTextInputFormatter
+                                                //               .allow(RegExp(
+                                                //                   "[0-9,.]")),
+                                                //         ],
+                                                //         controller: controller
+                                                //             .energy_high.value,
+                                                //         keyboardType:
+                                                //             TextInputType
+                                                //                 .number,
+                                                //         onChanged: (value) =>
+                                                //             {},
+                                                //         validator: (text) {
+                                                //           if (text!.isEmpty) {
+                                                //             return '';
+                                                //           }
+                                                //           return null;
+                                                //         },
+                                                //         decoration:
+                                                //             InputDecoration(
+                                                //           errorStyle:
+                                                //               const TextStyle(
+                                                //                   height: 0),
+                                                //           isDense: true,
+                                                //           contentPadding:
+                                                //               EdgeInsets
+                                                //                   .fromLTRB(
+                                                //                       10,
+                                                //                       20,
+                                                //                       10,
+                                                //                       0),
+                                                //           floatingLabelBehavior:
+                                                //               FloatingLabelBehavior
+                                                //                   .never,
+                                                //           filled: true,
+                                                //           fillColor:
+                                                //               AppColors.white,
+                                                //           border:
+                                                //               OutlineInputBorder(
+                                                //             borderRadius:
+                                                //                 BorderRadius
+                                                //                     .circular(
+                                                //                         10.0),
+                                                //             borderSide: BorderSide(
+                                                //                 color: AppColors
+                                                //                     .offWhite),
+                                                //           ),
+                                                //           enabledBorder:
+                                                //               OutlineInputBorder(
+                                                //             borderRadius:
+                                                //                 BorderRadius
+                                                //                     .circular(
+                                                //                         10.0),
+                                                //             borderSide: BorderSide(
+                                                //                 color: AppColors
+                                                //                     .offWhite),
+                                                //           ),
+                                                //           focusedBorder:
+                                                //               OutlineInputBorder(
+                                                //             borderRadius:
+                                                //                 BorderRadius
+                                                //                     .circular(
+                                                //                         10.0),
+                                                //             borderSide: BorderSide(
+                                                //                 color: AppColors
+                                                //                     .offWhite),
+                                                //           ),
+                                                //           labelStyle: TextStyle(
+                                                //               color: AppColors
+                                                //                   .offWhite),
+                                                //           suffixIcon: Icon(
+                                                //               Icons.percent,
+                                                //               color: AppColors
+                                                //                   .offWhite),
+                                                //         ),
+                                                //       ),
+                                                //     ),
+                                                //     const SizedBox(width: 20),
+                                                //     SizedBox(
+                                                //       height: 40,
+                                                //       width: 150,
+                                                //       child: TextFormField(
+                                                //         inputFormatters: <TextInputFormatter>[
+                                                //           LengthLimitingTextInputFormatter(
+                                                //               10),
+                                                //           FilteringTextInputFormatter
+                                                //               .allow(RegExp(
+                                                //                   "[0-9,.]")),
+                                                //         ],
+                                                //         controller: controller
+                                                //             .energy_reference
+                                                //             .value,
+                                                //         keyboardType:
+                                                //             TextInputType
+                                                //                 .number,
+                                                //         onChanged: (value) =>
+                                                //             {},
+                                                //         validator: (text) {
+                                                //           if (text!.isEmpty) {
+                                                //             return '';
+                                                //           }
+                                                //           return null;
+                                                //         },
+                                                //         decoration:
+                                                //             InputDecoration(
+                                                //           errorStyle:
+                                                //               const TextStyle(
+                                                //                   height: 0),
+                                                //           isDense: true,
+                                                //           contentPadding:
+                                                //               EdgeInsets
+                                                //                   .fromLTRB(
+                                                //                       10,
+                                                //                       20,
+                                                //                       10,
+                                                //                       0),
+                                                //           floatingLabelBehavior:
+                                                //               FloatingLabelBehavior
+                                                //                   .never,
+                                                //           filled: true,
+                                                //           fillColor:
+                                                //               AppColors.white,
+                                                //           border:
+                                                //               OutlineInputBorder(
+                                                //             borderRadius:
+                                                //                 BorderRadius
+                                                //                     .circular(
+                                                //                         10.0),
+                                                //             borderSide: BorderSide(
+                                                //                 color: AppColors
+                                                //                     .offWhite),
+                                                //           ),
+                                                //           enabledBorder:
+                                                //               OutlineInputBorder(
+                                                //             borderRadius:
+                                                //                 BorderRadius
+                                                //                     .circular(
+                                                //                         10.0),
+                                                //             borderSide: BorderSide(
+                                                //                 color: AppColors
+                                                //                     .offWhite),
+                                                //           ),
+                                                //           focusedBorder:
+                                                //               OutlineInputBorder(
+                                                //             borderRadius:
+                                                //                 BorderRadius
+                                                //                     .circular(
+                                                //                         10.0),
+                                                //             borderSide: BorderSide(
+                                                //                 color: AppColors
+                                                //                     .offWhite),
+                                                //           ),
+                                                //           labelStyle: TextStyle(
+                                                //               color: AppColors
+                                                //                   .offWhite),
+                                                //           suffixIcon: Icon(
+                                                //               Icons.percent,
+                                                //               color: AppColors
+                                                //                   .offWhite),
+                                                //         ),
+                                                //       ),
+                                                //     ),
+                                                //     const SizedBox(width: 20),
+                                                //     SizedBox(
+                                                //       height: 40,
+                                                //       width: 150,
+                                                //       child: TextFormField(
+                                                //         inputFormatters: <TextInputFormatter>[
+                                                //           LengthLimitingTextInputFormatter(
+                                                //               10),
+                                                //           FilteringTextInputFormatter
+                                                //               .allow(RegExp(
+                                                //                   "[0-9,.]")),
+                                                //         ],
+                                                //         controller: controller
+                                                //             .energy_low.value,
+                                                //         keyboardType:
+                                                //             TextInputType
+                                                //                 .number,
+                                                //         onChanged: (value) =>
+                                                //             {},
+                                                //         validator: (text) {
+                                                //           if (text!.isEmpty) {
+                                                //             return '';
+                                                //           }
+                                                //           return null;
+                                                //         },
+                                                //         decoration:
+                                                //             InputDecoration(
+                                                //           errorStyle:
+                                                //               const TextStyle(
+                                                //                   height: 0),
+                                                //           isDense: true,
+                                                //           contentPadding:
+                                                //               EdgeInsets
+                                                //                   .fromLTRB(
+                                                //                       10,
+                                                //                       20,
+                                                //                       10,
+                                                //                       0),
+                                                //           floatingLabelBehavior:
+                                                //               FloatingLabelBehavior
+                                                //                   .never,
+                                                //           filled: true,
+                                                //           fillColor:
+                                                //               AppColors.white,
+                                                //           border:
+                                                //               OutlineInputBorder(
+                                                //             borderRadius:
+                                                //                 BorderRadius
+                                                //                     .circular(
+                                                //                         10.0),
+                                                //             borderSide: BorderSide(
+                                                //                 color: AppColors
+                                                //                     .offWhite),
+                                                //           ),
+                                                //           enabledBorder:
+                                                //               OutlineInputBorder(
+                                                //             borderRadius:
+                                                //                 BorderRadius
+                                                //                     .circular(
+                                                //                         10.0),
+                                                //             borderSide: BorderSide(
+                                                //                 color: AppColors
+                                                //                     .offWhite),
+                                                //           ),
+                                                //           focusedBorder:
+                                                //               OutlineInputBorder(
+                                                //             borderRadius:
+                                                //                 BorderRadius
+                                                //                     .circular(
+                                                //                         10.0),
+                                                //             borderSide: BorderSide(
+                                                //                 color: AppColors
+                                                //                     .offWhite),
+                                                //           ),
+                                                //           labelStyle: TextStyle(
+                                                //               color: AppColors
+                                                //                   .offWhite),
+                                                //           suffixIcon: Icon(
+                                                //               Icons.percent,
+                                                //               color: AppColors
+                                                //                   .offWhite),
+                                                //         ),
+                                                //       ),
+                                                //     ),
+                                                //     const SizedBox(width: 20),
+                                                //     SizedBox(
+                                                //       height: 40,
+                                                //       width: 150,
+                                                //       child: TextFormField(
+                                                //         inputFormatters: <TextInputFormatter>[
+                                                //           LengthLimitingTextInputFormatter(
+                                                //               10),
+                                                //           FilteringTextInputFormatter
+                                                //               .allow(RegExp(
+                                                //                   "[0-9,.]")),
+                                                //         ],
+                                                //         controller: controller
+                                                //             .energy_lowlow
+                                                //             .value,
+                                                //         keyboardType:
+                                                //             TextInputType
+                                                //                 .number,
+                                                //         onChanged: (value) =>
+                                                //             {},
+                                                //         validator: (text) {
+                                                //           if (text!.isEmpty) {
+                                                //             return '';
+                                                //           }
+                                                //           return null;
+                                                //         },
+                                                //         decoration:
+                                                //             InputDecoration(
+                                                //           errorStyle:
+                                                //               const TextStyle(
+                                                //                   height: 0),
+                                                //           isDense: true,
+                                                //           contentPadding:
+                                                //               const EdgeInsets
+                                                //                   .fromLTRB(10,
+                                                //                   20, 10, 0),
+                                                //           floatingLabelBehavior:
+                                                //               FloatingLabelBehavior
+                                                //                   .never,
+                                                //           filled: true,
+                                                //           fillColor:
+                                                //               AppColors.white,
+                                                //           border:
+                                                //               OutlineInputBorder(
+                                                //             borderRadius:
+                                                //                 BorderRadius
+                                                //                     .circular(
+                                                //                         10.0),
+                                                //             borderSide: BorderSide(
+                                                //                 color: AppColors
+                                                //                     .offWhite),
+                                                //           ),
+                                                //           enabledBorder:
+                                                //               OutlineInputBorder(
+                                                //             borderRadius:
+                                                //                 BorderRadius
+                                                //                     .circular(
+                                                //                         10.0),
+                                                //             borderSide: BorderSide(
+                                                //                 color: AppColors
+                                                //                     .offWhite),
+                                                //           ),
+                                                //           focusedBorder:
+                                                //               OutlineInputBorder(
+                                                //             borderRadius:
+                                                //                 BorderRadius
+                                                //                     .circular(
+                                                //                         10.0),
+                                                //             borderSide: BorderSide(
+                                                //                 color: AppColors
+                                                //                     .offWhite),
+                                                //           ),
+                                                //           labelStyle: TextStyle(
+                                                //               color: AppColors
+                                                //                   .offWhite),
+                                                //           suffixIcon: Icon(
+                                                //               Icons.percent,
+                                                //               color: AppColors
+                                                //                   .offWhite),
+                                                //         ),
+                                                //       ),
+                                                //     ),
+                                                //   ],
+                                                // ),
                                               ],
                                             ),
                                           ),
@@ -1894,14 +2391,17 @@ class SetPoints extends StatelessWidget {
                               onPressed: () => {
                                 if (controller.setFormkey.currentState!
                                     .validate())
-                                  {controller.updateSetPoint()}
+                                  {
+                                    print("condition pass ------------->>> "),
+                                    controller.updateSetPoint()
+                                  }
                                 else
                                   {
                                     ScaffoldMessenger.of(context)
                                       ..hideCurrentSnackBar()
                                       ..showSnackBar(
-                                        Helper().snackBar(
-                                            'please fill all the fields'),
+                                        Helper()
+                                            .snackBar(controller.errorMessage),
                                       )
                                   }
                               },

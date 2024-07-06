@@ -30,6 +30,7 @@ class DrawerMenu extends StatelessWidget {
               title: const Text('Dashboard',
                   style: TextStyle(color: Colors.white, fontSize: 16)),
               onTap: () {
+                Get.back();
                 Get.toNamed(Routes.home);
               },
             ),
@@ -50,9 +51,8 @@ class DrawerMenu extends StatelessWidget {
               title: const Text('Plant Details',
                   style: TextStyle(color: Colors.white, fontSize: 16)),
               onTap: () {
-                Get.toNamed(
-                  Routes.plantDetails,
-                );
+                Get.back();
+                Get.toNamed(Routes.plantDetails);
               },
             ),
             const SizedBox(height: 20),
@@ -72,6 +72,7 @@ class DrawerMenu extends StatelessWidget {
               title: const Text('Set Points',
                   style: TextStyle(color: Colors.white, fontSize: 16)),
               onTap: () {
+                Get.back();
                 Get.toNamed(Routes.setPoints);
               },
             ),
@@ -92,27 +93,29 @@ class DrawerMenu extends StatelessWidget {
               title: const Text('User Management',
                   style: TextStyle(color: Colors.white, fontSize: 16)),
               onTap: () {
+                Get.back();
                 Get.toNamed(Routes.userManagement);
+                //Get.to(UnderProcess());
               },
             ),
-            const SizedBox(height: 20),
-            ListTile(
-              hoverColor: Colors.blue,
-              dense: true,
-              visualDensity: const VisualDensity(vertical: -4),
-              leading: SizedBox(
-                height: 25,
-                width: 25,
-                child: SvgPicture.asset(
-                  'assets/icons/plant.svg',
-                  // ignore: deprecated_member_use
-                  color: Colors.white,
-                ),
-              ),
-              title: const Text('Plant Information',
-                  style: TextStyle(color: Colors.white, fontSize: 16)),
-              onTap: () {},
-            ),
+            // const SizedBox(height: 20),
+            // ListTile(
+            //   hoverColor: Colors.blue,
+            //   dense: true,
+            //   visualDensity: const VisualDensity(vertical: -4),
+            //   leading: SizedBox(
+            //     height: 25,
+            //     width: 25,
+            //     child: SvgPicture.asset(
+            //       'assets/icons/plant.svg',
+            //       // ignore: deprecated_member_use
+            //       color: Colors.white,
+            //     ),
+            //   ),
+            //   title: const Text('Plant Information',
+            //       style: TextStyle(color: Colors.white, fontSize: 16)),
+            //   onTap: () {},
+            // ),
             const SizedBox(height: 20),
             ListTile(
               hoverColor: Colors.blue,
@@ -129,7 +132,10 @@ class DrawerMenu extends StatelessWidget {
               ),
               title: const Text('Support Document',
                   style: TextStyle(color: Colors.white, fontSize: 16)),
-              onTap: () {},
+              onTap: () {
+                Get.back();
+                Get.toNamed(Routes.underProcess);
+              },
             ),
             const SizedBox(height: 20),
             ListTile(
@@ -147,7 +153,10 @@ class DrawerMenu extends StatelessWidget {
               ),
               title: const Text('Help',
                   style: TextStyle(color: Colors.white, fontSize: 16)),
-              onTap: () {},
+              onTap: () {
+                Get.back();
+                Get.toNamed(Routes.underProcess);
+              },
             ),
             const SizedBox(height: 20),
             ListTile(
@@ -167,7 +176,10 @@ class DrawerMenu extends StatelessWidget {
                 'User Information',
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
-              onTap: () {},
+              onTap: () {
+                Get.back();
+                Get.toNamed(Routes.userInformation);
+              },
             ),
           ],
         ),

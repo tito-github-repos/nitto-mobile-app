@@ -3,12 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:nitto_app/screens/home.dart';
 
 import '../routes/routes.dart';
 import '../services/remote_service.dart';
-import '../utils/app_colors.dart';
 import '../utils/helper.dart';
+import 'user_information.dart';
 
 class LoginController extends GetxController {
   final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
@@ -17,6 +16,8 @@ class LoginController extends GetxController {
   final loginPassController = TextEditingController().obs;
 
   var loginIdErrMsg = ''.obs;
+  var usernameErrorMsg = ''.obs;
+  var passwordErrorMsg = ''.obs;
 
   var isLoading = false.obs;
   var passObscure = true.obs;
@@ -27,6 +28,15 @@ class LoginController extends GetxController {
   var isValidMail = false.obs;
 
   var webMail = ['gmail', 'yahoo', 'outlook', 'hotmail', 'live', 'bing'];
+
+  dynamic userInformation;
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    userInformation = Get.put(UserInformationController());
+  }
 
   bool isEmailValid(String email) {
     return RegExp(
@@ -101,6 +111,7 @@ class LoginController extends GetxController {
         isCompetitor.value = decodeRes['isCompetitor'];
         isWebmail.value = decodeRes['isWebmail'];
         if (isExist.value == false) {
+          passwordErrorMsg.value = '';
           isValidMail(true);
         } else {
           isValidMail(false);
@@ -123,27 +134,30 @@ class LoginController extends GetxController {
     }
   }
 
-  login() async {
+  login(key, username, password) async {
     try {
       isLoading(true);
-      var postData = {
-        "username": loginIdController.value.text.toString(),
-        "password": loginPassController.value.text.toString()
-      };
+      var postData = {"username": username, "password": password};
       var response = await RemoteService().login(postData);
       print("login response data ------> $response");
       if (response != null) {
         var decodeRes = jsonDecode(response.body);
         print("=========> $decodeRes");
         if (decodeRes['status_code'] == 200) {
-          ScaffoldMessenger.of(Get.context!)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              Helper().snackBar("Login Success"),
-            );
           isLoading(false);
+          GetStorage().write("gs_login_username", username);
+          GetStorage().write("gs_login_password", password);
           GetStorage().write("gs_login_data", decodeRes);
-          Get.offAllNamed(Routes.home);
+          if (key == 'login') {
+            ScaffoldMessenger.of(Get.context!)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                Helper().snackBar("Login Success"),
+              );
+            Get.offAllNamed(Routes.home);
+          } else {
+            userInformation.update();
+          }
         } else {
           ScaffoldMessenger.of(Get.context!)
             ..hideCurrentSnackBar()

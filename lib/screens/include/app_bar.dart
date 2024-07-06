@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
+import 'package:nitto_app/controllers/user_information.dart';
 
-import '../../routes/routes.dart';
 import '../../utils/app_colors.dart';
 
 class DynamicAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -10,6 +9,7 @@ class DynamicAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut(() => UserInformationController());
     return AppBar(
       backgroundColor: AppColors.primary,
       title: SizedBox(
@@ -25,10 +25,7 @@ class DynamicAppBar extends StatelessWidget implements PreferredSizeWidget {
         // Icon(Icons.settings),
         // SizedBox(width: 10),
         IconButton(
-          onPressed: () => {
-            GetStorage().write("gs_login_data", null),
-            Get.offAllNamed(Routes.login),
-          },
+          onPressed: () => {Get.find<UserInformationController>().logout()},
           icon: Icon(Icons.logout),
         ),
         SizedBox(width: 10)

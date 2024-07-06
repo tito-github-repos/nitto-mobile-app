@@ -46,6 +46,8 @@ dependencies:
   intl: ^0.18.1
   syncfusion_flutter_datepicker: ^23.2.7
   hexcolor: ^3.0.1
+  flutter_inappwebview: ^5.8.0
+  flutter_form_builder: ^9.2.1
 
 dev_dependencies:
   flutter_test:

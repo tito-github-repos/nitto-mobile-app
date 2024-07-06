@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
@@ -8,6 +10,10 @@ class RemoteService {
       ? GetStorage().read("gs_login_data")
       : '';
   var baseUrl = AppStrings.baseUrl;
+
+  Map<String, String> headerData = {
+    'Content-Type': 'application/json',
+  };
 
   checkUser(data) async {
     try {
@@ -184,7 +190,7 @@ class RemoteService {
       print("check data ------> ${loginDetails["emailID"]}");
       var postData = {
         //"username": loginDetails["emailID"],
-        "emailID": "demouser34@tito.org.in",
+        "emailID": GetStorage().read('gs_login_data')['emailID'],
       };
       final uri = Uri.parse('$baseUrl/mobile/plant/getPlants');
       var response = await http.post(uri,
@@ -205,6 +211,7 @@ class RemoteService {
         "plantUnqiueId": data,
       };
       final uri = Uri.parse('$baseUrl/mobile/plant/getTrains');
+      print("url --------->>> $uri");
       var response = await http.post(uri, body: postData);
       return response;
     } catch (err) {
@@ -238,16 +245,11 @@ class RemoteService {
     }
   }
 
-  getGraphService(stageId) async {
+  getGraphService(payload) async {
     try {
-      var postData = {
-        "stageId": "STAGE-1-Z1I703K",
-        "from": "2023-06-17",
-        "to": "2023-12-17"
-      };
-      print("---------> $postData");
-      final uri = Uri.parse('$baseUrl/plant/tsDataMobile');
-      var response = await http.post(uri, body: postData);
+      final uri = Uri.parse('$baseUrl/plant/tsData');
+      print("url ----------->>> $uri");
+      var response = await http.post(uri, body: payload);
       return response;
     } catch (err) {
       return null;
@@ -274,6 +276,8 @@ class RemoteService {
   Future getSetPoints(payload) async {
     try {
       final uri = Uri.parse('$baseUrl/plant/setPoint');
+      print("get set point url ---------->> $uri");
+      print("payload data ------->> $payload");
       var response = await http.post(uri,
           headers: {
             'Content-Type': 'application/json',
@@ -320,9 +324,57 @@ class RemoteService {
     }
   }
 
+  Future userAcessService(payload) async {
+    try {
+      final uri = Uri.parse('$baseUrl/plant/userAccess');
+      print("url ----------->>>> $uri");
+      print("payload data -------->> $payload");
+      var response =
+          await http.post(uri, body: jsonEncode(payload), headers: headerData);
+      return response;
+    } catch (err) {
+      print("------service-----> $err");
+      return null;
+    }
+  }
+
   Future gaugeData(payload) async {
     try {
       final uri = Uri.parse('$baseUrl/plant/gaugeData');
+      var response = await http.post(uri, body: payload);
+      return response;
+    } catch (err) {
+      print("------service-----> $err");
+      return null;
+    }
+  }
+
+  Future updateProfileService(payload) async {
+    try {
+      final uri = Uri.parse('$baseUrl/user/updateProfile');
+      print("url -------------->>>> $uri");
+      var response = await http.post(uri, body: payload);
+      return response;
+    } catch (err) {
+      print("------service-----> $err");
+      return null;
+    }
+  }
+
+  Future updatePasswordService(payload) async {
+    try {
+      final uri = Uri.parse('$baseUrl/user/changePW');
+      var response = await http.post(uri, body: payload);
+      return response;
+    } catch (err) {
+      print("------service-----> $err");
+      return null;
+    }
+  }
+
+  Future logoutService(payload) async {
+    try {
+      final uri = Uri.parse('$baseUrl/user/logout');
       var response = await http.post(uri, body: payload);
       return response;
     } catch (err) {

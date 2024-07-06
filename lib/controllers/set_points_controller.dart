@@ -24,11 +24,13 @@ class SetPointsController extends GetxController {
   String? plantValue = null;
   String? trainValue = null;
   String? passValue = null;
-  String? stageValue = "STAGE-1-PS2T2P1-DC";
+  String? stageValue = null;
   var isLoading = false.obs;
 
   int id = 1;
   String radioButtonItem = 'ONE';
+
+  String errorMessage = '';
 
   TextEditingController datePickerController = TextEditingController();
   TextEditingController dateController = TextEditingController();
@@ -64,8 +66,35 @@ class SetPointsController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    getPlants();
-    getSetPoints();
+    setInitialValue();
+    getPlants('auto');
+    //getSetPoints();
+  }
+
+  void setInitialValue() {
+    npf_high.value.text = 0.toString();
+    npf_highhigh.value.text = 0.toString();
+    npf_low.value.text = 0.toString();
+    npf_lowlow.value.text = 0.toString();
+    npf_reference.value.text = 0.toString();
+
+    nsp_high.value.text = 0.toString();
+    nsp_highhigh.value.text = 0.toString();
+    nsp_low.value.text = 0.toString();
+    nsp_lowlow.value.text = 0.toString();
+    nsp_reference.value.text = 0.toString();
+
+    ndp_high.value.text = 0.toString();
+    ndp_highhigh.value.text = 0.toString();
+    ndp_low.value.text = 0.toString();
+    ndp_lowlow.value.text = 0.toString();
+    ndp_reference.value.text = 0.toString();
+
+    energy_high.value.text = 0.toString();
+    energy_highhigh.value.text = 0.toString();
+    energy_low.value.text = 0.toString();
+    energy_lowlow.value.text = 0.toString();
+    energy_reference.value.text = 0.toString();
   }
 
   Future<void> selectDate(BuildContext context) async {
@@ -95,10 +124,12 @@ class SetPointsController extends GetxController {
 
   getSetPoints() async {
     try {
-      var payload = {"stageId": "STAGE-1-Z1I703K"};
+      var payload = {"stageId": stageValue};
       var response = await RemoteService().getSetPoints(jsonEncode(payload));
+      print("get set point response ------------>>> $response");
       if (response != null) {
         var decodeRes = jsonDecode(response.body);
+        print("decode response data ----------->>> $decodeRes");
         for (var i = 0; i < decodeRes.length; i++) {
           if (decodeRes[i]['parameter'] == 'NPF') {
             npf_high.value.text = decodeRes[i]['high'].toString();
@@ -199,70 +230,118 @@ class SetPointsController extends GetxController {
     }
   }
 
-  getPlants() async {
+  getPlants(key) async {
     try {
       var response = await RemoteService().getPlantService();
       if (response != null) {
         var decodeRes = jsonDecode(response.body);
-        //print("repos ---------> $decodeRes");
+        //print("repos ---------> $decodeRes");g
         plantModel = PlantModel.fromJson(decodeRes);
         trainModel = null;
         passModel = null;
         stageModel = null;
+        if (key == 'auto' && plantModel!.data!.isNotEmpty) {
+          plantValue = plantModel!.data![0].plantId;
+          getTrain('auto');
+        }
         update();
       } else {
+        plantModel = null;
+        trainModel = null;
+        passModel = null;
+        stageModel = null;
         isLoading(false);
+        update();
       }
     } catch (e) {
+      plantModel = null;
+      trainModel = null;
+      passModel = null;
+      stageModel = null;
+      isLoading(false);
+      update();
       print("---------catch calling -----> $e");
     }
   }
 
-  getTrain() async {
+  getTrain(key) async {
     try {
+      print("plant value -------->>>>> $plantValue");
       var response = await RemoteService().getTrainService(plantValue);
       if (response != null) {
         var decodeRes = jsonDecode(response.body);
         trainModel = TrainModel.fromJson(decodeRes);
         passModel = null;
         stageModel = null;
+        if (trainModel!.data.isNotEmpty) {
+          trainValue = trainModel!.data[0].trainId;
+          getPass(key);
+        }
+
         update();
       } else {
+        trainModel = null;
+        passModel = null;
+        stageModel = null;
         isLoading(false);
+        update();
       }
     } catch (e) {
+      trainModel = null;
+      passModel = null;
+      stageModel = null;
+      update();
       print("---------catch calling -----> $e");
     }
   }
 
-  getPass() async {
+  getPass(key) async {
     try {
       var response = await RemoteService().getPassService(trainValue);
       if (response != null) {
         var decodeRes = jsonDecode(response.body);
         passModel = PassModel.fromJson(decodeRes);
         stageModel = null;
+        if (passModel!.data!.isNotEmpty) {
+          passValue = passModel!.data![0].passId;
+          getStage(key);
+        }
         update();
       } else {
+        passModel = null;
+        stageModel = null;
         isLoading(false);
+        update();
       }
     } catch (e) {
-      print("--------- catch calling -----> $e");
+      passModel = null;
+      stageModel = null;
+      isLoading(false);
+      update();
+      print("---------catch calling -----> $e");
     }
   }
 
-  getStage() async {
+  getStage(key) async {
     try {
       var response = await RemoteService().getStageService(passValue);
       if (response != null) {
         var decodeRes = jsonDecode(response.body);
         stageModel = StageModel.fromJson(decodeRes);
+        if (stageModel!.data!.isNotEmpty) {}
+        stageValue = stageModel!.data![0].stageId;
+        // getGraph();
+        getSetPoints();
         update();
-        getGraph();
       } else {
+        stageModel = null;
         isLoading(false);
+        update();
       }
     } catch (e) {
+      stageModel = null;
+      isLoading(false);
+      update();
       print("---------catch calling -----> $e");
     }
   }

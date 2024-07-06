@@ -13,9 +13,10 @@ class Helper {
 
   snackBar(content) {
     return SnackBar(
-        elevation: 0,
-        behavior: SnackBarBehavior.floating,
-        content: Text(content));
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      content: Text(content),
+    );
   }
 
   loadingProgressBar() {
